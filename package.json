@@ -1,0 +1,52 @@
+{
+  "name": "lamp",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test:db": "node supabase/tests/db.test.mjs",
+    "test:unit": "node --test src/lib/*.test.mjs src/lib/google/*.test.mjs src/lib/student/*.test.mjs src/lib/professor/*.test.mjs src/lib/analysis/*.test.mjs",
+    "typecheck": "next typegen && tsc --noEmit",
+    "seed:demo": "node --env-file=.env.local scripts/seed-demo.mjs",
+    "worker": "node --env-file=.env.local scripts/suggestion-worker.mjs",
+    "test:student": "node scripts/student-smoke.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.119.0",
+    "@tiptap/pm": "^3.33.0",
+    "@tiptap/react": "^3.33.0",
+    "@tiptap/starter-kit": "^3.33.0",
+    "diff-match-patch": "^1.0.5",
+    "jszip": "^3.10.2",
+    "lucide-react": "^1.70.0",
+    "mammoth": "^1.13.0",
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "^3.10.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
+    "@tailwindcss/turbopack": "^4",
+    "@types/diff-match-patch": "^1.0.36",
+    "@types/gapi": "^0.0.47",
+    "@types/google.picker": "^0.0.52",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.5",
+    "playwright": "^1.65.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

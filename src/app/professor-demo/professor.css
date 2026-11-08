@@ -1,0 +1,1182 @@
+/* ==========================================================================
+   Lamp 교수 워크스페이스 — 학생 /lamp 디자인 시스템(lamp.css)의 토큰 · 규칙을 그대로 쓴다.
+   루트는 .lamp-app.prof-app 이라 색 · 글꼴 토큰(--ink, --line, --accent …)을 공유한다.
+   - 색은 토큰만. 강조는 --accent 하나, 상태색은 success / warning.
+   - 반경 6 / 8, 그림자 없음, 카드 대신 선(border)으로 구분.
+   ========================================================================== */
+
+.prof-app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+}
+.prof-app * {
+  box-sizing: border-box;
+}
+.prof-app :focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.prof-app h1,
+.prof-app h2,
+.prof-app h3,
+.prof-app p {
+  margin: 0;
+}
+.prof-app h1 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+.prof-app h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.prof-app h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.prof-app p,
+.prof-app small {
+  color: var(--muted);
+}
+.prof-app a {
+  color: inherit;
+  text-decoration: none;
+}
+.prof-app button,
+.prof-app input,
+.prof-app select {
+  font: inherit;
+}
+
+/* 버튼 — lamp-button.secondary 와 같은 모양 */
+.prof-app button {
+  cursor: pointer;
+  min-height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    background-color 0.12s var(--ease),
+    border-color 0.12s var(--ease);
+}
+.prof-app button:not(:disabled):hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+}
+.prof-app button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.prof-app .prof-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+.prof-app .prof-primary:not(:disabled):hover {
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+}
+
+/* ---- 사이드바 ---- */
+.prof-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar);
+  border-right: 1px solid var(--line);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 30;
+}
+.prof-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  margin: 0 0 12px;
+  padding: 0 8px;
+}
+.prof-brand small {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  color: var(--muted);
+}
+.prof-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.prof-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+.prof-sidebar nav a svg {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+}
+.prof-sidebar nav a:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.prof-sidebar nav a[aria-current="page"] {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 600;
+}
+.prof-sidebar nav a[aria-current="page"] svg {
+  color: var(--accent);
+}
+.prof-sidebar-bottom {
+  margin-top: auto;
+  padding: 12px 8px 4px;
+  border-top: 1px solid var(--line);
+}
+.prof-sidebar-bottom strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+.prof-sidebar-bottom p,
+.prof-sidebar-bottom a {
+  font-size: 12px;
+}
+.prof-sidebar-bottom a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  color: var(--muted);
+}
+.prof-sidebar-bottom a:hover {
+  color: var(--ink);
+}
+
+/* ---- 헤더 · 본문 ---- */
+.prof-body {
+  margin-left: var(--sidebar-w);
+}
+.prof-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--header-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.prof-header > span,
+.prof-header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prof-header > span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.prof-header > span svg {
+  color: var(--faint);
+}
+.prof-header b {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+.prof-header small {
+  font-size: 12px;
+}
+.prof-avatar {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-3);
+  color: var(--ink);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+}
+.prof-main {
+  max-width: var(--content-max);
+  padding: 32px 32px 64px;
+  margin: 0 auto;
+}
+.prof-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.prof-heading p:last-child {
+  margin-top: 4px;
+  font-size: 14px;
+}
+.prof-date {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* 배지 · 안내 띠 */
+.prof-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.prof-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 12px;
+}
+.prof-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--success-soft);
+  color: var(--success);
+  font-size: 13px;
+}
+.prof-app .prof-notice button {
+  min-height: 24px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+/* ---- 필터 ---- */
+.prof-filters {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.prof-filters label,
+.prof-team-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.prof-filters input,
+.prof-filters select,
+.prof-team-filters select {
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+}
+.prof-filters input:focus,
+.prof-filters select:focus,
+.prof-team-filters select:focus {
+  border-color: var(--accent);
+}
+.prof-filters input[type="date"] {
+  min-width: 140px;
+}
+.prof-app .prof-quiet {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+}
+.prof-app .prof-quiet:not(:disabled):hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+
+/* ---- 지표 띠 — lamp-metrics 와 같은 모양 ---- */
+.prof-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+.prof-stat {
+  padding: 16px;
+  min-width: 0;
+}
+.prof-stat + .prof-stat {
+  border-left: 1px solid var(--line);
+}
+.prof-stat > span {
+  display: none;
+}
+.prof-stat p {
+  font-size: 12px;
+  font-weight: 500;
+}
+.prof-stat strong {
+  display: block;
+  margin: 4px 0 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.prof-stat strong small {
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 400;
+}
+.prof-stat > div {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---- 섹션 · 카드 ---- */
+.prof-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 40px 0 12px;
+}
+.prof-section-title > span {
+  font-size: 13px;
+  color: var(--muted);
+}
+.prof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.prof-card {
+  min-width: 0;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+.prof-card > p {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+/* 팀 카드 */
+.prof-team-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.prof-team-icon {
+  display: inline-flex;
+  padding: 6px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--muted);
+}
+.prof-team-icon svg {
+  width: 16px;
+  height: 16px;
+}
+.prof-team h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.prof-team-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.prof-team-counts b {
+  margin-left: 4px;
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.prof-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.prof-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 500;
+}
+.prof-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.prof-status.verified {
+  color: var(--success);
+  background: var(--success-soft);
+}
+.prof-status.inferred {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+.prof-status.unknown {
+  color: var(--muted);
+  background: var(--surface-2);
+}
+.prof-team-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--ink) !important;
+  font-size: 13px;
+  font-weight: 500;
+}
+.prof-team-link svg {
+  color: var(--muted);
+  transition: transform 0.12s var(--ease);
+}
+.prof-team-link:hover svg {
+  color: var(--ink);
+  transform: translateX(2px);
+}
+
+/* 초대코드 */
+.prof-code {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.prof-code small {
+  flex-basis: 100%;
+  font-size: 12px;
+}
+.prof-app code {
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.prof-app .prof-code button {
+  min-height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.prof-member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.prof-member-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+/* ---- 수정 기록 ---- */
+.prof-record {
+  margin: 8px 0;
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+.prof-record:target {
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+.prof-record-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.prof-record-top time {
+  margin-left: auto;
+}
+.prof-record small {
+  font-size: 12px;
+}
+.prof-app details {
+  margin: 12px 0 8px;
+  font-size: 13px;
+}
+.prof-app summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-weight: 500;
+}
+.prof-app summary:hover {
+  color: var(--ink);
+}
+.prof-diff {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.prof-diff > div {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--danger-soft);
+}
+.prof-diff > div:last-child {
+  background: var(--success-soft);
+}
+.prof-app pre {
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.prof-diff pre {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+/* 탭 — lamp-segments 와 같은 모양 */
+.prof-tabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.prof-app .prof-tabs button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+}
+.prof-app .prof-tabs button:not(:disabled):hover {
+  background: transparent;
+  color: var(--ink);
+}
+.prof-app .prof-tabs button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--line-strong);
+}
+
+/* ---- 보고서 ---- */
+.prof-report h2 {
+  margin-top: 12px;
+  font-size: 18px;
+}
+.prof-report-summary {
+  margin: 16px 0 !important;
+  padding: 16px;
+  border-left: 2px solid var(--accent);
+  background: var(--surface-2);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  color: var(--ink-2) !important;
+}
+.prof-report > strong {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.prof-report h3 {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.prof-evidence {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.prof-evidence svg {
+  color: var(--muted);
+}
+.prof-evidence:hover {
+  background: var(--surface-2);
+}
+.prof-evidence small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+/* ---- 회의 ---- */
+.prof-meeting {
+  margin-top: 12px;
+}
+.prof-meeting h2 {
+  margin-top: 8px;
+}
+.prof-meeting h3 {
+  margin: 16px 0 8px;
+  font-size: 13px;
+}
+.prof-meeting pre,
+.prof-team-notes {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  font-size: 13px;
+}
+
+/* ---- 표 — lamp-table 과 같은 모양 ---- */
+.prof-table-wrap {
+  overflow: auto;
+}
+.prof-app table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.prof-app caption {
+  padding: 0 0 8px;
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+}
+.prof-app th,
+.prof-app td {
+  padding: 0 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.prof-app th {
+  height: 32px;
+  background: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.prof-app td {
+  height: var(--row-h);
+}
+.prof-app th:first-child,
+.prof-app td:first-child {
+  padding-left: 0;
+}
+.prof-app tbody tr:hover {
+  background: var(--surface-2);
+}
+
+/* ---- 빈 상태 · 로딩 · 오류 ---- */
+.prof-empty {
+  grid-column: 1/-1;
+  padding: 48px 20px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-lg);
+  text-align: center;
+  color: var(--muted);
+}
+.prof-empty svg {
+  margin: 0 auto 12px;
+}
+.prof-empty h3 {
+  font-size: 14px;
+  color: var(--ink);
+}
+.prof-empty p {
+  margin-top: 4px;
+  font-size: 13px;
+}
+.prof-app .prof-load {
+  display: flex;
+  margin: 16px auto;
+}
+.prof-state {
+  /* 화면 전체를 lamp 배경으로 채우고 내용만 가운데 560px */
+  padding: 80px max(24px, calc(50% - 280px));
+}
+.prof-state p {
+  margin-top: 8px;
+}
+.prof-state button,
+.prof-state a {
+  margin: 16px 8px 0 0;
+}
+.prof-state a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---- 대화상자 ---- */
+.prof-app .prof-menu {
+  display: none;
+}
+.prof-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(24 24 27 / 0.4);
+}
+.prof-dialog {
+  width: 440px;
+  max-width: 100%;
+}
+.prof-dialog p {
+  margin: 8px 0 20px;
+}
+.prof-dialog button {
+  margin-right: 8px;
+}
+.prof-native-dialog {
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-pop);
+}
+.prof-native-dialog::backdrop {
+  background: rgb(24 24 27 / 0.4);
+}
+.prof-native-dialog .prof-app {
+  min-height: auto;
+  border: 0;
+}
+.prof-native-dialog p {
+  margin: 8px 0 20px;
+}
+.prof-native-dialog button {
+  margin-right: 8px;
+}
+
+/* ---- 팀 상세 (학생 화면 구성, 조회 전용) ---- */
+.prof-team-preview .prof-banner {
+  margin-bottom: 24px;
+}
+.prof-team-preview .prof-team-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 16px;
+}
+/* 기여 기록 · AI 보고서 필터 — 학생 화면과 같은 세그먼트 + 작은 선택 상자 */
+.prof-filter-bar {
+  flex-wrap: wrap;
+  margin: 16px 0 0;
+}
+.prof-filter-bar .lamp-segments {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.prof-filter-bar .lamp-filter-selects select {
+  max-width: 220px;
+  text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+  .prof-filter-bar .lamp-filter-selects {
+    width: 100%;
+  }
+  .prof-filter-bar .lamp-filter-selects label {
+    flex: 1;
+    min-width: 0;
+  }
+  .prof-filter-bar .lamp-filter-selects select {
+    width: 100%;
+    max-width: none;
+  }
+}
+.prof-team-meeting {
+  min-width: 0;
+  padding: 20px;
+}
+.prof-team-meeting h3 {
+  margin: 20px 0 8px;
+}
+.prof-team-notes {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.prof-team-attendance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.prof-team-attendance small {
+  font-size: 12px;
+}
+.prof-team-preview .lamp-header-left b {
+  overflow-wrap: anywhere;
+}
+
+/* ---- 반응형 ---- */
+@media (max-width: 1100px) {
+  .prof-main {
+    padding: 24px 24px 56px;
+  }
+  .prof-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .prof-stat:nth-child(3) {
+    border-left: 0;
+  }
+  .prof-stat:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+}
+@media (max-width: 760px) {
+  .prof-sidebar {
+    width: 264px;
+    transform: translateX(-100%);
+    transition: transform 0.2s var(--ease);
+    box-shadow: var(--shadow-pop);
+  }
+  .prof-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .prof-body {
+    margin-left: 0;
+  }
+  .prof-header {
+    padding: 0 8px 0 4px;
+  }
+  .prof-header > span,
+  .prof-header small {
+    display: none;
+  }
+  .prof-main {
+    padding: 20px 16px 48px;
+  }
+  .prof-heading h1 {
+    font-size: 20px;
+  }
+  .prof-date {
+    display: none;
+  }
+  .prof-grid {
+    grid-template-columns: 1fr;
+  }
+  .prof-app .prof-menu {
+    display: inline-flex;
+    width: 36px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .prof-app .prof-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    border: 0;
+    border-radius: 0;
+    background: rgb(24 24 27 / 0.4);
+  }
+  .prof-card {
+    padding: 16px;
+  }
+  .prof-filters label {
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+  .prof-section-title {
+    align-items: flex-start;
+  }
+  .prof-diff {
+    grid-template-columns: 1fr;
+  }
+  .prof-record-top time {
+    margin-left: 0;
+  }
+  .prof-tabs {
+    flex-wrap: wrap;
+  }
+}
+.prof-brand-tag {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ---- 여러 수업: 사이드바 그룹 · 홈 ---- */
+.prof-sidebar nav {
+  gap: 16px;
+}
+.prof-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.prof-nav-label {
+  padding: 0 8px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.prof-header > span a {
+  color: var(--muted);
+}
+.prof-header > span a:hover {
+  color: var(--ink);
+}
+.prof-home-block {
+  margin-top: 40px;
+}
+.prof-course-tile code {
+  align-self: flex-start;
+}
+.prof-course-tile .prof-status-row {
+  margin-top: 0;
+}
+.prof-notes {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.prof-app .prof-logout {
+  min-height: auto;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+.prof-app .prof-logout:not(:disabled):hover {
+  background: none;
+  color: var(--ink);
+}
+.prof-new-course {
+  margin-bottom: 12px;
+}
+
+/* ---- 팀원 분석 (프로젝트별 · 팀원별) ---- */
+.prof-share {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+.prof-share-bar {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  height: 8px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--surface-3);
+}
+.prof-share-bar > span {
+  display: block;
+  min-width: 2px;
+}
+.prof-share-bar > .empty {
+  flex: 1;
+}
+.prof-share-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--muted);
+}
+.prof-share-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.prof-share-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+.prof-share-legend b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.prof-team-share-card {
+  padding: 16px 20px;
+}
+.prof-team-share-card .prof-share {
+  margin: 0;
+}
+.prof-member-table td small {
+  font-size: 12px;
+  font-weight: 400;
+}
+.lamp-analysis-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ---- 로딩 스켈레톤 (학생 화면 loading과 같은 틀) ---- */
+.prof-loading-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 12px 8px;
+}
+.prof-loading-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.prof-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.prof-loading-block {
+  margin-top: 40px;
+}
+@media (max-width: 900px) {
+  .prof-loading-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---- 사이드바 팀 탭 · 팀별 지표 표 ---- */
+.prof-team-tab-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-sm);
+  background: var(--surface-3);
+  color: var(--ink-2);
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.lamp-sidebar nav a.prof-team-tab[aria-current="true"] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.lamp-sidebar nav a.prof-team-tab[aria-current="true"] .prof-team-tab-icon {
+  background: var(--accent);
+  color: var(--bg);
+}
+.prof-nav-empty {
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.prof-status-row.prof-status-inline {
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-top: 0;
+}
+.prof-team-table .lamp-text-button {
+  display: inline-flex;
+  color: var(--muted);
+}
+
+/* 교수 헤더 알림 */
+.prof-notification-anchor { position: relative; display: flex; align-items: center; }
+.prof-notification-anchor > button { position: relative; }
+.prof-notification-anchor > .lamp-popover { right: 0; left: auto; }
+@media (max-width: 760px) {
+  .prof-notification-anchor > .lamp-popover { position: fixed; top: 60px; right: 12px; }
+  .prof-notification-anchor > button { min-height: 44px; min-width: 44px; }
+}

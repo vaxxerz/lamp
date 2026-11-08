@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>등잔 Summit 발표</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+/* 등잔 Lamp 디자인 토큰 (src/app/(lamp)/lamp/lamp.css와 동일) */
+:root {
+  --bg: #ffffff; --surface: #ffffff; --surface-2: #f7f7f8; --surface-3: #efeff1;
+  --line: #e4e4e7; --line-strong: #d4d4d8;
+  --ink: #18181b; --ink-2: #3f3f46; --muted: #71717a; --faint: #a1a1aa;
+  --accent: #4f46e5; --accent-ink: #4338ca; --accent-soft: #eef2ff; --accent-line: #c7d2fe;
+  --success: #15803d; --success-dot: #16a34a; --success-soft: #f0fdf4;
+  --warning: #b45309; --warning-dot: #d97706; --warning-soft: #fffbeb;
+  --danger: #dc2626; --danger-soft: #fef2f2;
+  --hl-1: #fef08a; --hl-1-dot: #eab308;
+  --hl-2: #bbf7d0; --hl-2-dot: #22c55e;
+  --hl-3: #bfdbfe; --hl-3-dot: #3b82f6;
+  --hl-4: #fbcfe8; --hl-4-dot: #ec4899;
+  --r-md: 6px; --r-lg: 8px; --r-xl: 12px; --r-2xl: 16px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --shadow-pop: 0 8px 24px rgb(24 24 27 / 0.1), 0 0 0 1px var(--line);
+  --chrome: #f4f4f5;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--chrome);
+  color: var(--ink);
+  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  letter-spacing: -0.012em;
+  word-break: keep-all;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { letter-spacing: -0.03em; font-weight: 700; }
+
+/* ---------- 16:9 무대: 1920×1080 고정 좌표계를 화면에 맞춰 확대/축소 ---------- */
+.viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+.stage {
+  width: 1920px; height: 1080px;
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(var(--s, 0.5));
+  transform-origin: center center;
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgb(24 24 27 / .06), 0 24px 64px rgb(24 24 27 / .12);
+  overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0;
+  padding: 96px 120px 112px;
+  display: flex; flex-direction: column;
+  visibility: hidden;
+}
+.slide.active { visibility: visible; animation: enter .35s var(--ease); }
+@keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* 공통 크롬 */
+.brand { position: absolute; top: 40px; left: 120px; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 22px; color: var(--ink); }
+.logo { width: 32px; height: 32px; border-radius: 7px; background: var(--ink); position: relative; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 19px; }
+.logo::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); right: 6px; bottom: 7px; }
+.section-tag { position: absolute; top: 44px; right: 120px; font-size: 18px; color: var(--muted); font-weight: 600; }
+.footer { position: absolute; left: 120px; right: 120px; bottom: 40px; display: flex; justify-content: space-between; font-size: 16px; color: var(--muted); }
+
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: var(--accent-ink); margin-bottom: 20px; }
+.kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.title { font-size: 64px; line-height: 1.2; }
+.lead { font-size: 28px; line-height: 1.55; color: var(--ink-2); margin-top: 20px; max-width: 1400px; }
+.muted { color: var(--muted); }
+.accent { color: var(--accent-ink); }
+.danger { color: var(--danger); }
+.success { color: var(--success); }
+.grow { flex: 1; min-height: 0; }
+.mt-48 { margin-top: 48px; } .mt-32 { margin-top: 32px; } .mt-24 { margin-top: 24px; } .mt-16 { margin-top: 16px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 32px; }
+.card.soft { background: var(--surface-2); border-color: transparent; }
+.card.accent-card { background: var(--accent-soft); border-color: var(--accent-line); }
+.card h3 { font-size: 30px; line-height: 1.3; }
+.card p, .card li { font-size: 22px; line-height: 1.6; color: var(--ink-2); }
+.card p + p { margin-top: 8px; }
+.grid { display: grid; gap: 24px; }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+ul.clean { list-style: none; padding: 0; margin: 0; }
+ul.clean li { position: relative; padding-left: 24px; }
+ul.clean li + li { margin-top: 10px; }
+ul.clean li::before { content: ""; position: absolute; left: 4px; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
+
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: var(--r-md); font-size: 18px; font-weight: 600; border: 1px solid var(--line); color: var(--ink-2); background: var(--surface); white-space: nowrap; }
+.badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+.badge.ok { background: var(--success-soft); color: var(--success); border-color: transparent; }
+.badge.warn { background: var(--warning-soft); color: var(--warning); border-color: transparent; }
+.badge.bad { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+.badge.info { background: var(--accent-soft); color: var(--accent-ink); border-color: transparent; }
+
+.stat { font-size: 88px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 40px; font-weight: 700; }
+.src { font-size: 16px; color: var(--muted); margin-top: 16px; line-height: 1.5; }
+
+/* 표지 */
+.cover { justify-content: center; padding-left: 160px; }
+.cover .glow { position: absolute; right: -240px; bottom: -320px; width: 1100px; height: 1100px; border-radius: 50%;
+  background: radial-gradient(circle, rgb(79 70 229 / .16) 0%, rgb(79 70 229 / .06) 35%, transparent 65%); }
+.cover .lamp-mark { position: absolute; right: 260px; top: 300px; width: 360px; height: 360px; }
+.cover h1 { font-size: 132px; letter-spacing: -0.05em; line-height: 1; }
+.cover h1 span { color: var(--accent); }
+.cover .tagline { font-size: 40px; font-weight: 600; margin-top: 40px; line-height: 1.45; }
+.cover .meta { margin-top: 56px; display: flex; gap: 12px; }
+
+/* 문서 목업 */
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; }
+.doc-bar { display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-bottom: 1px solid var(--line); background: var(--surface-2); font-size: 18px; color: var(--muted); }
+.doc-bar b { color: var(--ink); font-weight: 600; }
+.doc-body { padding: 28px 32px; font-size: 22px; line-height: 1.9; color: var(--ink-2); }
+.hl { padding: 2px 4px; border-radius: 4px; color: var(--ink); }
+.hl.a { background: var(--hl-1); } .hl.b { background: var(--hl-2); } .hl.c { background: var(--hl-3); } .hl.d { background: var(--hl-4); }
+.blur { background: var(--surface-3); color: transparent; border-radius: 4px; user-select: none; }
+.who { display: inline-flex; align-items: center; gap: 8px; font-size: 18px; color: var(--ink-2); margin-right: 20px; }
+.who i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+/* 파이프라인 */
+.pipe { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 16px; }
+.step { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px; }
+.step .n { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; font-weight: 700; font-size: 18px; }
+.step.hot .n { background: var(--accent); }
+.step h4 { margin: 16px 0 8px; font-size: 24px; letter-spacing: -0.02em; }
+.step p { font-size: 18px; line-height: 1.55; color: var(--ink-2); }
+.step code, code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .85em; background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+.step:not(:last-child)::after { content: "→"; position: absolute; right: -14px; top: 28px; color: var(--faint); font-size: 22px; z-index: 1; }
+
+/* 비교 */
+.vs { display: grid; grid-template-columns: 1fr 72px 1fr; align-items: stretch; gap: 0; }
+.vs .mid { display: grid; place-items: center; font-weight: 800; font-size: 24px; color: var(--faint); }
+
+/* 막대 */
+.bar-row { display: grid; grid-template-columns: 150px 1fr 90px; align-items: center; gap: 16px; font-size: 22px; }
+.bar-row + .bar-row { margin-top: 18px; }
+.bar { height: 20px; border-radius: 999px; background: var(--surface-3); overflow: hidden; display: flex; }
+.bar span { display: block; height: 100%; }
+.num { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
+
+/* 수식 */
+.formula { font-size: 34px; font-weight: 600; line-height: 1.6; padding: 32px 40px; border-radius: var(--r-xl); background: var(--ink); color: #fff; letter-spacing: -0.01em; }
+.formula .k { color: #a5b4fc; }
+.formula .c { color: #a1a1aa; font-size: 22px; font-weight: 500; display: block; margin-top: 8px; }
+
+/* 표 */
+table.t { width: 100%; border-collapse: collapse; font-size: 20px; }
+table.t th { text-align: left; font-weight: 600; color: var(--muted); font-size: 17px; padding: 10px 14px; border-bottom: 1px solid var(--line-strong); }
+table.t td { padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--ink-2); vertical-align: top; }
+table.t td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+
+/* 대시보드 목업 */
+.dash { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; }
+.member { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.member:last-child { border-bottom: 0; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 20px; color: var(--ink); }
+.member .nm { font-size: 22px; font-weight: 700; }
+.member .sub { font-size: 17px; color: var(--muted); margin-top: 2px; }
+.alert { display: flex; gap: 14px; padding: 18px 20px; border-radius: var(--r-lg); font-size: 19px; line-height: 1.5; }
+.alert + .alert { margin-top: 12px; }
+.alert.warn { background: var(--warning-soft); color: #78350f; }
+.alert.bad { background: var(--danger-soft); color: #7f1d1d; }
+.alert.info { background: var(--accent-soft); color: #312e81; }
+.alert b { white-space: nowrap; }
+
+/* 아키텍처 */
+.arch { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; align-items: stretch; }
+.node { border: 1px solid var(--line); border-radius: var(--r-xl); padding: 24px; background: var(--surface); }
+.node h4 { margin: 0 0 12px; font-size: 24px; display: flex; align-items: center; gap: 10px; }
+.node .chip { font-size: 15px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+.node ul { font-size: 19px; }
+.node.dark { background: var(--ink); border-color: var(--ink); color: #fff; }
+.node.dark h4 { color: #fff; }
+.node.dark ul.clean li { color: #d4d4d8; }
+.node.dark ul.clean li::before { background: #71717a; }
+
+/* 마무리 */
+.closing { justify-content: center; align-items: flex-start; }
+.closing .big { font-size: 96px; line-height: 1.15; letter-spacing: -0.045em; font-weight: 800; }
+
+/* ---------- 컨트롤 (무대 밖) ---------- */
+.progress { position: fixed; left: 0; top: 0; height: 3px; background: var(--accent); width: 0; transition: width .35s var(--ease); z-index: 10; }
+.hud { position: fixed; right: 16px; bottom: 16px; display: flex; gap: 8px; align-items: center; z-index: 10; font-size: 13px; }
+.hud button, .hud .pill { height: 34px; min-width: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line); background: rgb(255 255 255 / .9); backdrop-filter: blur(8px); color: var(--ink-2); font: inherit; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+.hud .pill { cursor: default; }
+.hud > * { white-space: nowrap; }
+@media (max-width: 520px) { #pace, .hud #fsBtn { display: none; } }
+.hud .pill.over { color: var(--danger); }
+.hud button:hover { background: #fff; color: var(--ink); }
+.hud { opacity: .25; transition: opacity .2s; }
+.hud:hover, body.show-hud .hud { opacity: 1; }
+.notes { position: fixed; left: 16px; right: 16px; bottom: 60px; max-width: 880px; margin: 0 auto; background: rgb(24 24 27 / .94); color: #f4f4f5; border-radius: 12px; padding: 16px 20px; font-size: 15px; line-height: 1.7; z-index: 11; display: none; max-height: 40vh; overflow: auto; }
+.notes b { color: #a5b4fc; font-weight: 600; }
+body.show-notes .notes { display: block; }
+.help { position: fixed; left: 16px; bottom: 16px; font-size: 12px; color: var(--muted); z-index: 10; opacity: .7; }
+@media (max-width: 700px) { .help { display: none; } .hud { right: 8px; bottom: 8px; opacity: .8; } }
+@media print {
+  body { overflow: visible; background: #fff; }
+  .viewport { position: static; display: block; }
+  .stage { position: relative; left: 0; top: 0; transform: none; width: 1920px; height: auto; box-shadow: none; border-radius: 0; }
+  .slide { position: relative; opacity: 1; visibility: visible; transform: none; height: 1080px; page-break-after: always; }
+  .progress, .hud, .notes, .help { display: none !important; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .slide, .progress { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="viewport">
+<main class="stage" id="stage" aria-live="polite">
+
+<!-- 1. 표지 -->
+<section class="slide cover active" data-sec="" data-time="30" data-notes="안녕하세요, Summit 트랙 '등잔'입니다. 오늘 주제는 '등잔 밑이 어둡다'. 팀플 기여의 증거는 매일 눈앞에서 만들어지는데, 평가하는 순간엔 아무도 그걸 보지 못한다는 이야기로 시작하겠습니다.">
+  <div class="glow"></div>
+  <svg class="lamp-mark" viewBox="0 0 200 200" aria-hidden="true">
+    <defs><radialGradient id="flame" cx="50%" cy="60%" r="50%"><stop offset="0" stop-color="#818cf8"/><stop offset="1" stop-color="#4f46e5"/></radialGradient></defs>
+    <path d="M100 30 C120 62 128 80 100 108 C72 80 80 62 100 30Z" fill="url(#flame)"/>
+    <ellipse cx="100" cy="128" rx="64" ry="16" fill="#18181b"/>
+    <path d="M44 128 Q100 172 156 128" fill="#18181b"/>
+    <rect x="92" y="158" width="16" height="22" fill="#18181b"/>
+    <rect x="66" y="178" width="68" height="8" rx="4" fill="#18181b"/>
+  </svg>
+  <div class="kicker">INFOSYS HACKATHON · SUMMIT TRACK · 주제 「등잔 밑이 어둡다」</div>
+  <h1>등잔<span>.</span></h1>
+  <p class="tagline">기여의 증거는 늘 우리 곁에 있었다.<br/><span class="muted">기록되지 않았을 뿐.</span></p>
+  <div class="meta">
+    <span class="badge info">팀 프로젝트 기여 분석 플랫폼</span>
+    <span class="badge">Google Docs 제안 모드 기반 정량화</span>
+    <span class="badge">AI 기여 리포트</span>
+  </div>
+</section>
+
+<!-- 2. 문제 제기 -->
+<section class="slide" data-sec="01 문제 정의" data-time="60" data-notes="질문 하나로 시작하겠습니다. 팀플 끝나고 동료평가지 써보셨죠? 그 평가지가 내 기여를 제대로 보여줬나요? 교수님은 결과물 하나와 이 평가지만으로 팀원 4명의 점수를 나눠야 합니다. 그런데 정작 기여의 흔적, 문서 편집 기록·회의·할 일은 전부 이미 존재합니다. 바로 등잔 밑에요.">
+  <div class="kicker">문제 정의</div>
+  <h2 class="title">교수는 팀원 4명의 점수를<br/><span class="accent">종이 한 장</span>으로 나눕니다.</h2>
+  <div class="grid g3 mt-48 grow" style="align-content:start">
+    <div class="card soft">
+      <span class="badge">지금 교수가 보는 것</span>
+      <h3 class="mt-16">결과물 1개 + 동료평가지</h3>
+      <p class="mt-16">"다 같이 열심히 했어요." 친분·눈치·보복이 섞인 자기보고 설문.</p>
+    </div>
+    <div class="card soft">
+      <span class="badge">실제로 존재하는 것</span>
+      <h3 class="mt-16">매일 쌓이는 기여의 흔적</h3>
+      <p class="mt-16">문서 편집, 회의 출결, 할 일 완료, 파일 버전 — 이미 다 있지만 아무도 집계하지 않음.</p>
+    </div>
+    <div class="card accent-card">
+      <span class="badge info">등잔 밑</span>
+      <h3 class="mt-16">증거는 바로 옆에 있다</h3>
+      <p class="mt-16">평가하는 순간에만 보이지 않을 뿐. 등잔은 그 증거를 <b>자동으로 기록하고 정량화</b>합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. 데이터: 무임승차 -->
+<section class="slide" data-sec="01 문제 정의" data-time="60" data-notes="이건 저희 느낌이 아니라 데이터입니다. 알바몬 대학생 설문에서 조별과제 무임승차는 2007년에도, 2013년에도 '캠퍼스 꼴불견 1위'였습니다. 여학생은 절반 가까이가 1위로 꼽았고요. 해외 연구에서도 학부생 63%가 자기 팀에서 사회적 태만이 있었다고 답했고, 팀이 크고 과제가 클수록 태만이 늘어난다는 연구도 있습니다. 오래된 문제인데, 아직 해결되지 않았습니다.">
+  <div class="kicker">문제의 크기 · 공개 설문과 연구</div>
+  <h2 class="title">2007년에도, 2013년에도 <span class="accent">무임승차는 1위</span>였습니다.</h2>
+  <div class="grid g4 mt-48">
+    <div class="card">
+      <div class="stat">37.4<small>%</small></div>
+      <p class="mt-16"><b>조별과제 무임승차</b>를 캠퍼스 꼴불견 1위로 꼽은 대학생</p>
+      <p class="src">알바몬 대학생 940명 설문 (2007)</p>
+    </div>
+    <div class="card">
+      <div class="stat">49.3<small>%</small></div>
+      <p class="mt-16">같은 조사에서 <b>여학생</b> 응답 중 무임승차 1위 비율</p>
+      <p class="src">알바몬 대학생 940명 설문 (2007)</p>
+    </div>
+    <div class="card">
+      <div class="stat" style="font-size:72px">1<small>위</small></div>
+      <p class="mt-16">6년 뒤에도 <b>"묻어가는 조원"</b>이 여전히 꼴불견 1위 (19.9%)</p>
+      <p class="src">알바몬 대학생 1,175명 설문 (노컷뉴스 2013.6.18 보도)</p>
+    </div>
+    <div class="card">
+      <div class="stat">63<small>%</small></div>
+      <p class="mt-16">자기 팀에서 <b>사회적 태만이 있었다</b>고 답한 학부생</p>
+      <p class="src">Mettu University 학부생 250명 자기보고 설문</p>
+    </div>
+  </div>
+  <div class="card soft mt-24" style="display:flex;gap:24px;align-items:center">
+    <span class="badge info">연구</span>
+    <p style="font-size:22px;color:var(--ink-2)">팀 규모와 과제 범위가 클수록 사회적 태만이 늘고, <b>프로젝트 도중 여러 번 평가</b>할수록 줄어든다 — Aggarwal &amp; O'Brien (2008), <i>Journal of Marketing Education</i> 30(3)</p>
+  </div>
+</section>
+
+<!-- 4. 동료평가의 한계 -->
+<section class="slide" data-sec="01 문제 정의" data-time="60" data-notes="그럼 동료평가지로 충분할까요? 연구들은 한계를 지적합니다. 친분과 압박 때문에 모두에게 같은 점수를 주는 담합이 생기고, 무임승차자일수록 서로 후하게 평가해 달라고 기대한다는 교수 인터뷰도 있습니다. 2024년 홍익대 공학교육연구 논문은 3~6명 팀에서는 동료평가 점수를 산술평균하는 것 자체가 통계적으로 어렵다고 봅니다. 그리고 대부분 학기 말 한 번만 합니다. 연구가 권하는 '도중에 여러 번'과 정반대죠.">
+  <div class="kicker">왜 동료평가지로는 부족한가</div>
+  <h2 class="title">동료평가지는 <span class="accent">신뢰도 낮은 단일 증거</span>입니다.</h2>
+  <div class="grid g2 mt-48">
+    <div class="card">
+      <span class="badge bad">편향</span>
+      <h3 class="mt-16">친분 · 압박 · 담합</h3>
+      <p class="mt-16">친분과 동료 압박이 점수에 영향을 주고, 모두에게 같은 점수를 주는 사실상의 담합이 관찰됩니다.</p>
+      <p class="src">Griffith University 동료평가 가이드 (FSTE 2019 발표자료)</p>
+    </div>
+    <div class="card">
+      <span class="badge bad">역선택</span>
+      <h3 class="mt-16">무임승차자가 더 후하게 평가</h3>
+      <p class="mt-16">무임승차자는 같은 대우를 기대하며 동료를 후하게 평가하는 경향이 있다는 현장 교수의 지적.</p>
+      <p class="src">The Korea Times, "'Free riders' undermine classes" (2013.7.9)</p>
+    </div>
+    <div class="card">
+      <span class="badge warn">통계</span>
+      <h3 class="mt-16">3~6명 팀은 평균 내기도 어렵다</h3>
+      <p class="mt-16">팀 규모가 작아 동료평가 점수의 산술평균을 쓰기 통계적으로 어렵고, 반영 비율을 제한해야 한다고 제안.</p>
+      <p class="src">장현재 (2024), 공학교육연구 27(1), 63–70</p>
+    </div>
+    <div class="card">
+      <span class="badge warn">시점</span>
+      <h3 class="mt-16">학기 말 단 한 번의 기억</h3>
+      <p class="mt-16">연구는 <b>프로젝트 도중 반복 평가</b>를 권하지만, 현실의 평가지는 끝난 뒤 기억에 의존합니다.</p>
+      <p class="src">Aggarwal &amp; O'Brien (2008)</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 구글 독스 문제 -->
+<section class="slide" data-sec="02 핵심 기술" data-time="60" data-notes="학생들은 이미 구글 독스로 같이 씁니다. 그럼 구글 독스 버전 기록 보면 되지 않냐? 안 됩니다. 여러 명이 동시에 편집하면 구글은 짧은 시간의 편집을 하나의 버전으로 합칩니다. 버전 하나에 편집자 3명이 붙어 있는데, 어느 문장을 누가 썼는지는 알 수 없습니다. 팀플이 가장 바쁜 순간, 마감 직전 동시 편집이 바로 기여가 가장 안 보이는 순간입니다.">
+  <div class="kicker">핵심 문제 · Google Docs 동시 편집</div>
+  <h2 class="title">동시에 쓰면, <span class="accent">누가 무엇을 썼는지 사라집니다.</span></h2>
+  <div class="vs mt-48 grow" style="align-content:start">
+    <div class="doc">
+      <div class="doc-bar"><b>구글 독스 · 버전 기록</b><span style="margin-left:auto">오후 11:42 · 편집자 3명</span></div>
+      <div class="doc-body">
+        <p><span class="blur">2. 문제 정의 — 기존 동료평가의 한계는</span> <span class="blur">주관성에 있다. 따라서 본 팀은 활동 데이터</span> <span class="blur">를 기반으로 한 새로운 평가 방식을 제안한다.</span></p>
+        <p class="mt-16"><span class="blur">3. 해결 방안 — 설문 결과 응답자의 다수가</span> <span class="blur">불공정을 경험했다고 답했으며</span></p>
+        <div class="mt-24" style="display:flex;gap:10px;flex-wrap:wrap">
+          <span class="badge">버전 1개로 병합됨</span>
+          <span class="badge warn">문장별 작성자 없음</span>
+          <span class="badge warn">글자 수 기여 불명</span>
+        </div>
+      </div>
+    </div>
+    <div class="mid">VS</div>
+    <div class="doc">
+      <div class="doc-bar"><b>등잔 · 기여 추적</b><span style="margin-left:auto">제안 단위 · 작성자 확정</span></div>
+      <div class="doc-body">
+        <p><span class="hl a">2. 문제 정의 — 기존 동료평가의 한계는</span> <span class="hl b">주관성에 있다. 따라서 본 팀은 활동 데이터</span> <span class="hl a">를 기반으로 한 새로운 평가 방식을 제안한다.</span></p>
+        <p class="mt-16"><span class="hl c">3. 해결 방안 — 설문 결과 응답자의 다수가</span> <span class="hl b">불공정을 경험했다고 답했으며</span></p>
+        <div class="mt-24">
+          <span class="who"><i style="background:var(--hl-1-dot)"></i>김민준 +68자</span>
+          <span class="who"><i style="background:var(--hl-2-dot)"></i>이서연 +41자</span>
+          <span class="who"><i style="background:var(--hl-3-dot)"></i>박지호 +24자</span>
+          <span class="who"><i style="background:var(--hl-4-dot)"></i>최유나 0자</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 솔루션 개요 -->
+<section class="slide" data-sec="03 솔루션" data-time="50" data-notes="등잔은 팀플을 하는 공간 자체입니다. 학생은 평소처럼 구글 문서, 칸반, 회의록, 파일로 작업합니다. 그 활동이 전부 기여 이벤트로 기록되고, 기여도 모델이 정량화하고, AI가 근거와 함께 읽기 쉬운 리포트로 정리합니다. 그리고 마지막 판단은 교수님이 합니다. 우리는 판단을 대신하지 않고, 판단의 근거를 만듭니다.">
+  <div class="kicker">솔루션 · 등잔 Lamp</div>
+  <h2 class="title">평소처럼 팀플하면, <span class="accent">기여가 증거로 남습니다.</span></h2>
+  <div class="pipe mt-48">
+    <div class="step"><div class="n">1</div><h4>작업</h4><p>구글 문서 · 칸반 · 회의록 · 파일. 학생은 평소처럼 일합니다.</p></div>
+    <div class="step"><div class="n">2</div><h4>기록</h4><p>모든 행동이 <code>activity_events</code>로 자동 적재 (누가 · 언제 · 얼마나).</p></div>
+    <div class="step hot"><div class="n">3</div><h4>정량화</h4><p>제안 모드로 작성자 확정 → 기여도 모델로 팀 내 비중 계산.</p></div>
+    <div class="step hot"><div class="n">4</div><h4>AI 분석</h4><p>규칙 엔진 + Claude가 패턴 · 경고 · 근거 링크 리포트 작성.</p></div>
+    <div class="step"><div class="n">5</div><h4>판단</h4><p>교수가 근거를 보고 결정. 등잔은 <b>판단을 대신하지 않습니다.</b></p></div>
+  </div>
+  <div class="grid g3 mt-32">
+    <div class="card soft"><h3>정량 데이터</h3><p class="mt-16">편집 글자 수, 완료한 할 일, 출석, 파일 버전 — 팀 내 비중(%)으로 환산</p></div>
+    <div class="card soft"><h3>정성 데이터</h3><p class="mt-16">무엇을 썼는지 요약, 회의록 작성, 팀원 인정(👍), 활동 패턴</p></div>
+    <div class="card accent-card"><h3>교수용 한 장 요약</h3><p class="mt-16">누가 캐리했고, 누가 기록이 적은지 — 근거 클릭 한 번으로 원문까지</p></div>
+  </div>
+</section>
+
+<!-- 7. 제안 모드 파이프라인 -->
+<section class="slide" data-sec="02 핵심 기술" data-time="80" data-notes="핵심 기술입니다. 구글 독스의 제안 모드는 제안마다 작성자가 붙습니다. 저희는 이걸 동시 편집의 작성자 문제를 푸는 열쇠로 씁니다. 팀원은 제안 모드로 쓰기만 하면 됩니다. 등잔 워커가 2초마다 문서의 제안을 읽고, 입력이 2.5초간 멈추면 끝난 걸로 보고, docx의 변경 추적 정보에서 작성자를 짝지어 기록한 뒤, 바로 수락합니다. 그래서 문서는 일반 편집처럼 깔끔하게 유지되는데, 기여는 추정 없이 '확정'으로 남습니다. 4명이 동시에 써도요.">
+  <div class="kicker">핵심 기술 ① · Google Docs API 제안 모드</div>
+  <h2 class="title">제안 하나하나에 <span class="accent">작성자를 붙이고, 자동 수락</span>합니다.</h2>
+  <div class="pipe mt-48">
+    <div class="step"><div class="n">1</div><h4>제안 수집</h4><p>워커가 2초마다 <code>documents.get</code><br/>(SUGGESTIONS_INLINE) → 제안 ID · 내용</p></div>
+    <div class="step"><div class="n">2</div><h4>입력 종료 판단</h4><p>내용이 <b>2.5초간</b> 그대로면 입력이 끝난 것으로 판단</p></div>
+    <div class="step hot"><div class="n">3</div><h4>작성자 매칭</h4><p>docx 변경 추적 <code>w:ins</code> · <code>w:del</code>의 작성자 · 시각을 제안과 짝짓기</p></div>
+    <div class="step hot"><div class="n">4</div><h4>확정 기록</h4><p>팀원 구글 이름과 매칭 → 기여 이벤트<br/><span class="badge ok" style="margin-top:6px">confidence: exact</span></p></div>
+    <div class="step"><div class="n">5</div><h4>자동 수락</h4><p><code>acceptSuggestion</code> → 제안 후 약 <b>3~5초</b> 뒤 일반 글씨로</p></div>
+  </div>
+  <div class="grid g3 mt-32">
+    <div class="card soft"><h3>동시 편집에도 정확</h3><p class="mt-16">4명이 같은 순간 써도 제안 단위로 작성자가 분리됩니다.</p></div>
+    <div class="card soft"><h3>문서는 그대로 깔끔</h3><p class="mt-16">자동 수락으로 학생에겐 일반 편집과 같은 경험.</p></div>
+    <div class="card soft"><h3>기록 없는 수락 없음</h3><p class="mt-16">docx에 아직 반영 안 된 제안은 수락하지 않고 다음 차례로. 동명이인은 보류.</p></div>
+  </div>
+</section>
+
+<!-- 8. 정밀도 사다리 -->
+<section class="slide" data-sec="02 핵심 기술" data-time="50" data-notes="제안 모드를 안 쓴 구간도 버리지 않습니다. 등잔 자체 스냅샷끼리 diff를 내고, Drive Activity API로 그 구간에 실제 편집한 사람과 편집 시간을 가져와 시간 비율로 나눕니다. 예를 들어 2분 구간에 300자가 늘었고 A가 80초, B가 50초 편집했다면 A 185자, B 115자. 그리고 모든 기여에는 신뢰도 등급이 붙습니다. 확정인지 추정인지를 교수님이 구분해서 볼 수 있어요.">
+  <div class="kicker">핵심 기술 ② · 정밀도 단계</div>
+  <h2 class="title">모든 기여에 <span class="accent">신뢰도 등급</span>이 붙습니다.</h2>
+  <div class="grid mt-48" style="grid-template-columns:1.1fr 1fr;gap:32px">
+    <div class="card">
+      <table class="t">
+        <thead><tr><th>등급</th><th>방식</th><th>정밀도</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge ok">exact</span></td><td>제안 모드 · docx 변경 추적의 작성자</td><td><b class="success">문장 단위 확정</b></td></tr>
+          <tr><td><span class="badge ok">single</span></td><td>스냅샷 diff 구간에 편집자 1명</td><td>구간 단위 확정</td></tr>
+          <tr><td><span class="badge warn">shared</span></td><td>여러 명 → Drive Activity 편집 시간 비율로 배분</td><td>추정</td></tr>
+          <tr><td><span class="badge">fallback</span></td><td>Activity 없음 → 마지막 수정자</td><td>참고용</td></tr>
+        </tbody>
+      </table>
+      <p class="src">등잔 내부 문서 · 칸반 · 회의 · 파일은 작성자가 항상 확정(verified)</p>
+    </div>
+    <div class="card soft">
+      <span class="badge">shared 배분 예시</span>
+      <p class="mt-16" style="font-size:22px">2분 구간 <b>+300 / −40자</b>, 편집 시간 A 80초 · B 50초</p>
+      <div class="mt-32">
+        <div class="bar-row"><span>A (80초)</span><div class="bar"><span style="width:61.5%;background:var(--hl-1-dot)"></span></div><span class="num">+185</span></div>
+        <div class="bar-row"><span>B (50초)</span><div class="bar"><span style="width:38.5%;background:var(--hl-2-dot)"></span></div><span class="num">+115</span></div>
+      </div>
+      <ul class="clean mt-32" style="font-size:19px;color:var(--ink-2)">
+        <li>편집 기록이 있으면 최소 10% 보장, 최대 잔여법으로 합계 보존</li>
+        <li>Activity 지연 대비 최근 5분 구간은 다음 동기화 때 재배분</li>
+        <li>수락된 제안 글자는 diff 배분에서 제외 → 중복 집계 없음</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 9. 기여도 모델 -->
+<section class="slide" data-sec="02 핵심 기술" data-time="70" data-notes="이렇게 모은 활동을 점수로 바꾸는 모델입니다. 활동 하나하나에 점수가 붙고, 카테고리별로 합친 뒤 로그를 씌웁니다. 수확체감이라 글자 수 부풀리기로는 점수가 잘 안 오릅니다. 팀원이 인정해 준 활동은 1.2배. 그리고 교수님이 과목별로 문서·할 일·회의·파일 가중치를 정하고, 팀 안에서 비율로 정규화해 합이 100%가 됩니다. 붙여넣기는 0.3배, 할 일은 다른 팀원이 완료를 확인해야 온전한 점수가 됩니다.">
+  <div class="kicker">기여도 모델 · get_team_contributions</div>
+  <h2 class="title">양을 세되, <span class="accent">조작은 어렵게.</span></h2>
+  <div class="formula mt-48">
+    개인 기여 비중 = Σ<sub>카테고리</sub> <span class="k">교수 가중치</span> × <span class="k">ln(1 + Σ 활동 점수 × 인정 1.2)</span> ÷ 팀 합계
+    <span class="c">문서 40 · 할 일 30 · 회의 15 · 파일 15 (기본값, 과목별 조정) — 팀원 합 = 100%, 활동 없는 카테고리는 가중치에서 제외</span>
+  </div>
+  <div class="grid g2 mt-32" style="gap:24px">
+    <div class="card">
+      <h3>활동 점수</h3>
+      <table class="t mt-16">
+        <tbody>
+          <tr><td>문서 · 회의록</td><td>유효 글자 100자당 1점 (추가 + 삭제×0.5), 1건 최대 30점</td></tr>
+          <tr><td>할 일 완료</td><td>팀원이 완료 확인 3점 / 미확인 1.5점</td></tr>
+          <tr><td>회의 출석</td><td>출석 1점 · 지각 0.5점</td></tr>
+          <tr><td>파일 버전</td><td>실제 변경 시에만 2점 + 변경량 · 슬라이드 수</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card accent-card">
+      <h3>조작 방지 장치</h3>
+      <ul class="clean mt-16">
+        <li><b>ln(1+x) 수확체감</b> — 스팸성 대량 편집 효과 억제</li>
+        <li><b>붙여넣기 0.3배</b> — 직접 쓴 글자만 온전히 인정</li>
+        <li><b>건당 상한</b> — 한 번에 몰아 쓴 3,000자 이상은 무시</li>
+        <li><b>팀원 확인</b> — 할 일 완료는 동료가 인정해야 만점</li>
+        <li><b>같은 파일 재업로드 0점</b> · 같은 revision은 1번만 기록</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 10. AI 분석 -->
+<section class="slide" data-sec="04 AI 분석" data-time="70" data-notes="숫자만으론 교수님이 읽기 어렵습니다. 그래서 2단계 분석을 합니다. 먼저 규칙 엔진이 패턴과 경고를 계산합니다. 꾸준함인지, 막판 몰아치기인지, 2주 이상 공백이 있는지, 비중이 균등 몫의 30% 미만인지. 그다음 Claude가 그 결과로 문장을 씁니다. 중요한 건 가드레일입니다. 입력에 없는 근거는 못 쓰고, 숫자를 새로 만들지 못하고, '무임승차했다'고 단정하거나 성의·인성을 평가하지 않습니다. 확정과 추정도 구분합니다. AI는 판사가 아니라 서기입니다.">
+  <div class="kicker">AI 분석 · 규칙 엔진 rules-v1 + Claude Sonnet</div>
+  <h2 class="title">규칙이 판정하고, <span class="accent">AI는 근거와 함께 설명</span>합니다.</h2>
+  <div class="grid mt-48" style="grid-template-columns:1.15fr 1fr;gap:32px">
+    <div class="card">
+      <h3>규칙 엔진이 계산하는 경고</h3>
+      <table class="t mt-16">
+        <tbody>
+          <tr><td><span class="badge bad">기록 적음</span></td><td>팀 내 비중 &lt; 균등 몫 × 30%</td></tr>
+          <tr><td><span class="badge warn">쏠림</span></td><td>3인 이상 팀에서 한 명이 60% 이상</td></tr>
+          <tr><td><span class="badge warn">막판 집중</span></td><td>활동의 60% 이상이 최근 7일</td></tr>
+          <tr><td><span class="badge warn">공백</span></td><td>활동 사이 2주 이상 연속 0건</td></tr>
+          <tr><td><span class="badge info">불일치</span></td><td>|활동 비중 − 동료평가 비중| ≥ 15%p</td></tr>
+          <tr><td><span class="badge">근거 약함</span></td><td>확정(verified) 근거 40% 미만</td></tr>
+        </tbody>
+      </table>
+      <p class="src">패턴: 꾸준함 · 몰아치기 · 막판 집중 · 간헐적 · 활동 없음 / 팀 쏠림은 지니 계수로 함께 표시</p>
+    </div>
+    <div class="card soft">
+      <h3>AI 가드레일</h3>
+      <ul class="clean mt-16">
+        <li><b>근거 없는 주장 금지</b> — 하이라이트마다 원본 활동 ID 연결, 없는 ID는 폐기</li>
+        <li><b>숫자 생성 금지</b> — 비중 · 건수는 규칙 엔진 값 그대로</li>
+        <li><b>확정 / 추정 구분</b> — 추정 근거만 있으면 "(추정)" 표기</li>
+        <li><b>양과 흔적만</b> — 성의 · 인성 평가, "무임승차" 단정 금지</li>
+        <li><b>AI 실패 시</b> — 규칙 문장으로 그대로 표시 (서비스 중단 없음)</li>
+      </ul>
+      <div class="mt-24"><span class="badge info">교수용: 면담 질문 1~3개</span> <span class="badge">학생용: 다음 주 행동 제안</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11. 교수 대시보드 -->
+<section class="slide" data-sec="04 AI 분석" data-time="70" data-notes="교수님 화면입니다. 팀원별 기여 비중과 확정 근거 비율, 활동 패턴이 한눈에 보입니다. 김민준 님이 42%로 팀을 끌고 갔고, 최유나 님은 6%에 2주 공백이 있습니다. 그런데 동료평가에선 최유나 님이 25%를 받았네요. 바로 이 불일치가 등잔 밑을 비추는 순간입니다. 교수님은 근거를 클릭해 원문을 확인하고, AI가 제안한 면담 질문으로 학생 이야기를 들은 뒤 판단하시면 됩니다.">
+  <div class="kicker">교수 대시보드 · 예시 팀 (가상 데이터)</div>
+  <h2 class="title">누가 캐리했고, <span class="accent">누가 기록이 적은지</span> 한눈에.</h2>
+  <div class="dash mt-48">
+    <div class="card" style="padding:24px 32px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="font-size:24px">팀원별 기여 비중</h3><span class="badge">전체 기간 · 확정 근거 81%</span></div>
+      <div class="member"><div class="avatar" style="background:var(--hl-1)">민</div><div><div class="nm">김민준 <span class="badge ok" style="font-size:15px">꾸준함</span></div><div class="sub">문서 1,840자 · 할 일 9건 확인 · 회의 6/6</div></div><div class="num" style="font-size:36px">42%</div></div>
+      <div class="member"><div class="avatar" style="background:var(--hl-2)">서</div><div><div class="nm">이서연 <span class="badge ok" style="font-size:15px">꾸준함</span></div><div class="sub">문서 1,120자 · 회의록 4건 · 회의 6/6</div></div><div class="num" style="font-size:36px">31%</div></div>
+      <div class="member"><div class="avatar" style="background:var(--hl-3)">지</div><div><div class="nm">박지호 <span class="badge warn" style="font-size:15px">막판 집중</span></div><div class="sub">발표자료 슬라이드 14장 · 회의 4/6</div></div><div class="num" style="font-size:36px">21%</div></div>
+      <div class="member"><div class="avatar" style="background:var(--hl-4)">유</div><div><div class="nm">최유나 <span class="badge bad" style="font-size:15px">간헐적</span></div><div class="sub">문서 120자 · 회의 2/6 · 11/3 주부터 2주 공백</div></div><div class="num danger" style="font-size:36px">6%</div></div>
+    </div>
+    <div>
+      <div class="alert bad"><b>기록 적음</b><span>최유나님의 비중이 6%로 균등 몫(25%)의 30%보다 낮아요.</span></div>
+      <div class="alert info"><b>불일치</b><span>최유나님의 활동 비중(6%)과 동료평가 비중(25%)이 많이 달라요.</span></div>
+      <div class="alert warn"><b>막판 집중</b><span>박지호님 활동의 71%가 마감 전 7일에 몰려 있어요.</span></div>
+      <div class="card soft mt-16" style="padding:24px">
+        <span class="badge info">AI · 면담에서 물어볼 질문</span>
+        <p class="mt-16" style="font-size:20px">"자료 조사나 오프라인 작업처럼 등잔에 기록되지 않은 기여가 있었다면 어떤 것이었나요?"</p>
+        <p class="src">근거 클릭 → 해당 편집 원문 · 시각 · 신뢰도로 이동</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12. 교수 없이도 -->
+<section class="slide" data-sec="03 솔루션" data-time="40" data-notes="교수님이 없어도 씁니다. 동아리, 공모전, 스터디처럼 교수가 없는 팀은 독립 팀으로 만들면 됩니다. 이때 AI는 교수나 성적 이야기를 하지 않고, 팀원에게 다음 주에 해볼 행동을 제안합니다. 학생 입장에서는 '내가 한 걸 증명할 방법'이 생기고, 내 기여 리포트를 포트폴리오로 쓸 수 있습니다. 주 사용자는 학생입니다.">
+  <div class="kicker">두 가지 사용 방식</div>
+  <h2 class="title">교수가 없어도, <span class="accent">팀끼리 바로</span> 씁니다.</h2>
+  <div class="grid g2 mt-48">
+    <div class="card accent-card">
+      <span class="badge info">수업 팀 · class</span>
+      <h3 class="mt-16">교수가 과목을 만들고 초대 코드로 참여</h3>
+      <ul class="clean mt-16">
+        <li>교수: 과목별 가중치 설정, 팀 · 팀원 드릴다운</li>
+        <li>AI 리포트: 확인할 점 + 면담 질문</li>
+        <li>동료평가와 활동 데이터 불일치 플래그</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge">독립 팀 · independent</span>
+      <h3 class="mt-16">동아리 · 공모전 · 스터디 팀이 직접 생성</h3>
+      <ul class="clean mt-16">
+        <li>교수 · 성적 언급 없는 팀원용 리포트</li>
+        <li>"다음 주에 해볼 행동" 중심의 제안</li>
+        <li>내 기여를 실시간 확인 → <b>억울함 해소 · 포트폴리오</b></li>
+      </ul>
+    </div>
+  </div>
+  <div class="card soft mt-24"><p style="font-size:24px">공통: 학생 본인이 자기 데이터를 <b>실시간으로 열람</b>합니다. 숨은 감시가 아니라 <b>모두가 같은 근거를 보는 투명성</b>.</p></div>
+</section>
+
+<!-- 13. 아키텍처 -->
+<section class="slide" data-sec="05 아키텍처" data-time="60" data-notes="아키텍처입니다. Next.js 16을 Vercel에 배포했고, Supabase Postgres에 행 수준 보안(RLS)을 걸어 학생은 자기 팀, 교수는 자기 과목만 볼 수 있습니다. 기여 점수 계산은 DB 함수와 트리거로 처리해 클라이언트가 점수를 조작할 수 없습니다. 구글은 사용자가 고른 파일만 접근하는 drive.file 최소 권한이고, 토큰은 AES-256-GCM으로 암호화해 저장합니다. 제안 수락 워커는 상시 실행이 필요해 별도 프로세스로 분리했습니다.">
+  <div class="kicker">시스템 아키텍처 · 안정성</div>
+  <h2 class="title">권한은 DB가 지키고, <span class="accent">점수는 서버가 계산</span>합니다.</h2>
+  <div class="arch mt-48">
+    <div class="node">
+      <h4>클라이언트 <span class="chip">Next.js 16 · Vercel</span></h4>
+      <ul class="clean">
+        <li>App Router · TypeScript · Tailwind v4</li>
+        <li>Tiptap 문서 · 칸반 · 회의 · 파일</li>
+        <li>Recharts 대시보드</li>
+        <li>Supabase Realtime 실시간 갱신</li>
+      </ul>
+    </div>
+    <div class="node dark">
+      <h4>데이터 · 권한 <span class="chip" style="color:#d4d4d8;border-color:#3f3f46">Supabase</span></h4>
+      <ul class="clean">
+        <li>Postgres <b>RLS</b> — 학생은 내 팀, 교수는 내 과목만</li>
+        <li>트리거로 <code style="background:#27272a;color:#e4e4e7">activity_events</code> 자동 적재 · 점수 계산</li>
+        <li>점수 · 기여 비중은 DB 함수에서만 계산</li>
+        <li>Auth (한양대 구글 로그인) · Storage</li>
+      </ul>
+    </div>
+    <div class="node">
+      <h4>외부 연동 <span class="chip">API</span></h4>
+      <ul class="clean">
+        <li>Google Docs · Drive · Drive Activity · Picker</li>
+        <li>제안 수락 워커 (2초 주기, 별도 프로세스)</li>
+        <li>Claude Sonnet — 근거 검사 후 리포트 병합</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid g4 mt-24">
+    <div class="card soft" style="padding:24px"><h3 style="font-size:22px">최소 권한</h3><p style="font-size:18px" class="mt-16"><code>drive.file</code> — 사용자가 고른 파일만</p></div>
+    <div class="card soft" style="padding:24px"><h3 style="font-size:22px">토큰 암호화</h3><p style="font-size:18px" class="mt-16">refresh token AES-256-GCM, 클라이언트 접근 불가 컬럼</p></div>
+    <div class="card soft" style="padding:24px"><h3 style="font-size:22px">멱등 동기화</h3><p style="font-size:18px" class="mt-16">같은 revision 1회 기록, 문서당 25개씩 이어 처리</p></div>
+    <div class="card soft" style="padding:24px"><h3 style="font-size:22px">테스트</h3><p style="font-size:18px" class="mt-16">PGlite DB · RLS 시나리오, 배분 · 규칙 단위 테스트</p></div>
+  </div>
+</section>
+
+<!-- 14. 예상 질문 -->
+<section class="slide" data-sec="06 신뢰" data-time="50" data-notes="심사위원님들이 물어보실 만한 질문에 미리 답하겠습니다. 감시 아니냐 — 점수는 참고 지표이고 학생이 같은 데이터를 봅니다. 조작하면 — 수확체감, 붙여넣기 감점, 동료 확인. 기록 안 되는 기여는 — 그래서 AI가 단정하지 않고 면담 질문을 드립니다. 왜 옮기냐 — 안 옮깁니다. 이미 쓰는 구글 독스를 그대로 연결합니다.">
+  <div class="kicker">예상 질문</div>
+  <h2 class="title">심사위원이 물어볼 네 가지</h2>
+  <div class="grid g2 mt-48">
+    <div class="card"><h3>"감시 아닌가요?"</h3><p class="mt-16">점수는 <b>참고 지표</b>, 최종 판단은 교수. 학생도 같은 데이터를 실시간 열람. 개인 메시지는 분석하지 않습니다.</p></div>
+    <div class="card"><h3>"글자 수 부풀리면요?"</h3><p class="mt-16">ln 수확체감 · 건당 상한 · 붙여넣기 0.3배 · 동료 확인 가중. 양을 늘려도 비중은 잘 안 오릅니다.</p></div>
+    <div class="card"><h3>"기록 안 되는 기여는요?"</h3><p class="mt-16">그래서 AI는 <b>단정하지 않습니다.</b> 근거가 약하면 표시하고, 면담 질문으로 교수가 직접 확인하게 합니다.</p></div>
+    <div class="card"><h3>"왜 새 도구로 옮겨야 하죠?"</h3><p class="mt-16">옮기지 않습니다. <b>이미 쓰는 구글 독스</b>를 Picker로 연결만 하면 됩니다. 한양대 구글 로그인과 동시에 연동.</p></div>
+  </div>
+</section>
+
+<!-- 15. 상용화 -->
+<section class="slide" data-sec="07 상용화" data-time="30" data-notes="출시 계획입니다. 지금 배포되어 동작하고, 한양대 구글 계정으로 바로 로그인됩니다. 다음 단계는 학과 단위 파일럿, LMS 성적 연동과 CSV 내보내기, 그리고 개발 과목을 위한 GitHub 커밋 연동입니다.">
+  <div class="kicker">출시 가능성 · 로드맵</div>
+  <h2 class="title">지금 배포되어 있고, <span class="accent">다음은 학과 단위</span>입니다.</h2>
+  <div class="pipe mt-48" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    <div class="step hot"><div class="n">✓</div><h4>현재</h4><p>Vercel 배포 · 한양대 구글 로그인 · 학생/교수 데모 계정 · 제안 모드 워커</p></div>
+    <div class="step"><div class="n">1</div><h4>학과 파일럿</h4><p>캡스톤 · 종합설계 과목에서 한 학기 운영, 교수 피드백으로 가중치 기본값 보정</p></div>
+    <div class="step"><div class="n">2</div><h4>LMS 연동</h4><p>성적 내보내기(CSV) · LMS 과목 · 명단 자동 동기화</p></div>
+    <div class="step"><div class="n">3</div><h4>연동 확장</h4><p>GitHub 커밋 · 슬라이드 · 시트 정밀화, 다른 대학으로 확장</p></div>
+  </div>
+  <div class="grid g3 mt-32">
+    <div class="card soft"><h3>학생</h3><p class="mt-16">무료 · 억울함 해소 · 기여 포트폴리오</p></div>
+    <div class="card soft"><h3>교수</h3><p class="mt-16">채점 시간 단축 · 근거 기반 개인 점수</p></div>
+    <div class="card accent-card"><h3>학교</h3><p class="mt-16">팀 기반 수업 품질 관리 · 기관 라이선스</p></div>
+  </div>
+</section>
+
+<!-- 16. 마무리 -->
+<section class="slide closing" data-sec="" data-time="20" data-notes="정리하겠습니다. 기여의 증거는 늘 우리 곁에 있었습니다. 기록되지 않았을 뿐. 등잔은 그 증거를 기록하고, 판단은 교수님께 돌려드립니다. 감사합니다.">
+  <div class="kicker">마무리</div>
+  <p class="big">판단은 <span class="accent">교수가</span>,<br/>근거는 <span class="accent">등잔이</span>.</p>
+  <p class="lead" style="font-size:32px;margin-top:40px">기여의 증거는 늘 우리 곁에 있었다. 기록되지 않았을 뿐.</p>
+  <div class="mt-48" style="display:flex;gap:12px;flex-wrap:wrap">
+    <span class="badge info">제안 모드로 작성자 확정</span>
+    <span class="badge">수확체감 기여도 모델</span>
+    <span class="badge">근거 검사 AI 리포트</span>
+    <span class="badge">RLS · 최소 권한</span>
+  </div>
+  <p class="muted" style="font-size:28px;margin-top:64px">감사합니다. 질문 받겠습니다.</p>
+</section>
+
+<!-- 17. 출처 (부록) -->
+<section class="slide" data-sec="부록" data-time="0" data-notes="부록: 인용한 자료 출처입니다. 질문이 오면 보여주세요.">
+  <div class="kicker">부록 · 인용 자료</div>
+  <h2 class="title" style="font-size:52px">출처</h2>
+  <table class="t mt-32" style="font-size:19px">
+    <thead><tr><th>자료</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>알바몬 대학생 설문 (2007, n=940)</td><td>조별과제 무임승차 꼴불견 1위 37.4%, 여학생 49.3% — 파이낸셜뉴스 2007.11.14 보도</td></tr>
+      <tr><td>알바몬 대학생 설문 (n=1,175)</td><td>"묻어가는 조원" 꼴불견 1위 19.9% — 노컷뉴스 2013.6.18 보도</td></tr>
+      <tr><td>Aggarwal &amp; O'Brien (2008)</td><td>Social loafing on group projects. <i>Journal of Marketing Education</i>, 30(3), 255–264</td></tr>
+      <tr><td>장현재 (2024)</td><td>팀원 기여도에 대한 동료평가의 신뢰성과 성적 반영 방법에 대한 연구. 공학교육연구 27(1), 63–70</td></tr>
+      <tr><td>Mettu University 학부생 설문 (n=250)</td><td>응답자 63%가 자기 팀에서 사회적 태만을 인지 (자기보고)</td></tr>
+      <tr><td>Griffith University 동료평가 가이드</td><td>친분 · 동료 압박 편향, 동일 점수 담합 — FSTE 2019 발표자료</td></tr>
+      <tr><td>The Korea Times (2013.7.9)</td><td>"'Free riders' undermine classes" — 무임승차자의 후한 동료평가 경향</td></tr>
+    </tbody>
+  </table>
+  <p class="src">예시 대시보드의 이름 · 수치는 시연용 가상 데이터입니다.</p>
+</section>
+
+<div class="brand"><span class="logo">L</span>등잔</div>
+<div class="section-tag" id="secTag"></div>
+<div class="footer"><span>등잔 · Summit Track · 등잔 밑이 어둡다</span><span id="pageNo"></span></div>
+</main>
+</div>
+
+<div class="notes" id="notes"></div>
+<div class="help">← → 이동 · N 발표 노트 · T 타이머 · F 전체화면</div>
+<div class="hud" id="hud">
+  <button id="prev" aria-label="이전 슬라이드">‹</button>
+  <span class="pill" id="counter">1 / 1</span>
+  <button id="next" aria-label="다음 슬라이드">›</button>
+  <button id="timerBtn" title="타이머 시작/정지 (T)">15:00</button>
+  <span class="pill" id="pace" title="이 슬라이드까지 권장 누적 시간">권장 0:00</span>
+  <button id="notesBtn" title="발표 노트 (N)">노트</button>
+  <button id="fsBtn" title="전체화면 (F)">⛶</button>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const total = slides.length;
+  const $ = (id) => document.getElementById(id);
+  let i = 0;
+
+  // 화면 크기에 맞춰 1920×1080 무대를 확대/축소 (가로세로 비 유지)
+  function fit() {
+    const pad = window.innerWidth < 700 ? 8 : 24;
+    const s = Math.min((window.innerWidth - pad * 2) / 1920, (window.innerHeight - pad * 2) / 1080);
+    stage.style.setProperty('--s', Math.max(s, 0.1));
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  const fmt = (sec) => { const m = Math.floor(Math.abs(sec) / 60), s = Math.floor(Math.abs(sec) % 60); return (sec < 0 ? '-' : '') + m + ':' + String(s).padStart(2, '0'); };
+  const cumulative = slides.reduce((acc, el, k) => { acc.push((acc[k - 1] || 0) + Number(el.dataset.time || 0)); return acc; }, []);
+
+  function show(n) {
+    i = Math.max(0, Math.min(total - 1, n));
+    slides.forEach((el, k) => el.classList.toggle('active', k === i));
+    const el = slides[i];
+    $('secTag').textContent = el.dataset.sec || '';
+    $('pageNo').textContent = String(i + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    $('counter').textContent = (i + 1) + ' / ' + total;
+    $('progress').style.width = ((i + 1) / total * 100) + '%';
+    $('notes').innerHTML = '<b>' + (i + 1) + '. 권장 ' + (el.dataset.time || 0) + '초</b> — ' + (el.dataset.notes || '');
+    $('pace').textContent = '권장 ' + fmt(cumulative[i]);
+    if (location.hash !== '#' + (i + 1)) history.replaceState(null, '', '#' + (i + 1));
+  }
+  const next = () => show(i + 1), prev = () => show(i - 1);
+
+  // 15분 카운트다운
+  const LIMIT = 15 * 60;
+  let elapsed = 0, timer = null;
+  function renderTimer() { const left = LIMIT - elapsed; $('timerBtn').textContent = fmt(left); $('timerBtn').style.color = left < 0 ? 'var(--danger)' : left < 60 ? 'var(--warning)' : ''; }
+  function toggleTimer() { if (timer) { clearInterval(timer); timer = null; } else { timer = setInterval(() => { elapsed++; renderTimer(); }, 1000); } document.body.classList.toggle('show-hud', !!timer); }
+  function toggleNotes() { document.body.classList.toggle('show-notes'); }
+  function toggleFs() { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(total - 1);
+    else if (k === 'n' || k === 'N') toggleNotes();
+    else if (k === 't' || k === 'T') toggleTimer();
+    else if (k === 'f' || k === 'F') toggleFs();
+    else if (k === 'r' || k === 'R') { elapsed = 0; renderTimer(); }
+  });
+  $('next').onclick = next; $('prev').onclick = prev;
+  $('timerBtn').onclick = toggleTimer; $('notesBtn').onclick = toggleNotes; $('fsBtn').onclick = toggleFs;
+
+  // 무대 클릭: 오른쪽 2/3 → 다음, 왼쪽 1/3 → 이전
+  stage.addEventListener('click', (e) => { const r = stage.getBoundingClientRect(); (e.clientX - r.left < r.width / 3 ? prev : next)(); });
+  // 스와이프
+  let sx = null, sy = null;
+  window.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    if (sx == null) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) (dx < 0 ? next : prev)();
+    sx = sy = null;
+  }, { passive: true });
+  window.addEventListener('hashchange', () => { const n = parseInt(location.hash.slice(1), 10); if (n) show(n - 1); });
+
+  renderTimer();
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+})();
+</script>
+</body>
+</html>

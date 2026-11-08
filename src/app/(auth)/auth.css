@@ -1,0 +1,333 @@
+/* 로그인 · 회원가입 — lamp.css 토큰 위에서 (루트 .lamp-app.lamp-auth) */
+.lamp-auth {
+  flex: 1;
+  display: flex;
+  background: var(--sidebar);
+}
+.lamp-auth-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 16px;
+}
+.lamp-auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+}
+.lamp-auth-logo {
+  display: inline-flex;
+  margin-bottom: 24px;
+}
+.lamp-auth-logo .lamp-logo {
+  font-size: 22px;
+}
+.lamp-auth-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  margin-bottom: 24px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.lamp-auth-tabs a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.lamp-auth-tabs a:hover {
+  color: var(--ink);
+}
+.lamp-auth-tabs a[aria-current="page"] {
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--line-strong);
+}
+.lamp-auth-card h1 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.lamp-auth-desc {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.lamp-auth-body {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+/* 구글 버튼 (주 동작) */
+.lamp-auth-google {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 20px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: var(--bg) !important;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.12s var(--ease);
+}
+.lamp-auth-body > .lamp-auth-google:first-child {
+  margin-top: 0;
+}
+.lamp-auth-google svg {
+  padding: 2px;
+  border-radius: 4px;
+  background: #fff;
+  box-sizing: content-box;
+}
+.lamp-auth-google:not(:disabled):hover {
+  opacity: 0.88;
+}
+.lamp-auth-google:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.lamp-auth-google:focus-visible,
+.lamp-auth-tabs a:focus-visible,
+.lamp-auth-link:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* 역할 선택 */
+.lamp-auth-roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.lamp-auth-roles legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.lamp-auth-role {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    border-color 0.12s var(--ease),
+    background-color 0.12s var(--ease);
+}
+.lamp-auth-role:hover {
+  border-color: var(--muted);
+}
+.lamp-auth-role input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.lamp-auth-role svg {
+  color: var(--muted);
+}
+.lamp-auth-role span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.lamp-auth-role strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+.lamp-auth-role small {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.lamp-auth-role:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.lamp-auth-role:has(input:checked) svg {
+  color: var(--accent);
+}
+.lamp-auth-role:has(input:focus-visible) {
+  box-shadow: var(--ring);
+}
+
+/* 안내 · 오류 */
+.lamp-auth-note {
+  margin-top: 16px !important;
+  padding: 10px 12px;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  background: var(--surface-2);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.lamp-auth-hint {
+  margin-top: 8px !important;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.lamp-auth-error {
+  margin-top: 8px !important;
+  font-size: 13px;
+  color: var(--danger);
+}
+.lamp-auth-switch {
+  margin-top: 20px !important;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+.lamp-auth-switch a,
+.lamp-auth-link {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* 데모 체험 */
+.lamp-auth-demo {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line-strong);
+}
+.lamp-auth-demo > p {
+  margin-bottom: 8px !important;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: center;
+}
+.lamp-auth-demo-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.lamp-auth-demo-buttons .lamp-button {
+  height: 36px;
+}
+.lamp-auth-demo details {
+  margin-top: 12px;
+  font-size: 12px;
+  text-align: center;
+}
+.lamp-auth-demo summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.lamp-auth-demo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.lamp-auth-demo-form .lamp-button {
+  height: 36px;
+}
+
+/* 교수 확인 대기 */
+.lamp-auth-facts {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+}
+.lamp-auth-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.lamp-auth-facts > div + div {
+  border-top: 1px solid var(--line);
+}
+.lamp-auth-facts dt {
+  color: var(--muted);
+}
+.lamp-auth-facts dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 500;
+}
+.lamp-auth-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+.lamp-auth-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.lamp-auth-status.is-pending {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.lamp-auth-status.is-approved {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.lamp-auth-status.is-rejected {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.lamp-auth-foot {
+  max-width: 420px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .lamp-auth-card {
+    padding: 24px 20px;
+  }
+  .lamp-auth-roles {
+    grid-template-columns: 1fr;
+  }
+}

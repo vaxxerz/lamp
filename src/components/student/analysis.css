@@ -1,0 +1,115 @@
+/* 분석 탭 — 디자인 토큰(lamp.css)을 쓰되, 토큰이 없을 때를 위한 기본값을 함께 둔다 */
+.lamp-analysis-period select {
+  border: 1px solid var(--line, #e6e5e1);
+  border-radius: var(--r-md, 8px);
+  padding: 8px 12px;
+  background: var(--surface, #fff);
+  color: var(--ink, #141414);
+  font-weight: 600;
+}
+.lamp-analysis-card {
+  padding: 20px 20px 16px;
+  margin-bottom: 16px;
+}
+.lamp-analysis-head h2,
+.lamp-analysis-ai h2 {
+  font-size: 16px;
+  margin: 0;
+}
+.lamp-analysis-head p,
+.lamp-analysis-ai p,
+.lamp-analysis-split {
+  margin: 4px 0 0;
+  color: var(--muted, #6b6a65);
+  font-size: 13px;
+}
+.lamp-analysis-members {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.lamp-analysis-members .lamp-analysis-card {
+  margin-bottom: 0;
+}
+.lamp-analysis-member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.lamp-analysis-member > div {
+  flex: 1;
+  min-width: 0;
+}
+.lamp-analysis-member strong {
+  font-size: 15px;
+}
+.lamp-analysis-member p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--ink-2, #3d3d3a);
+}
+.lamp-plus {
+  color: var(--success, #2a6e47);
+}
+.lamp-minus {
+  color: var(--danger, #b42335);
+}
+.lamp-analysis-rank {
+  border: 1px solid var(--line, #e6e5e1);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink-2, #3d3d3a);
+}
+.lamp-chart-tip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: var(--r-md, 8px);
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #e6e5e1);
+  box-shadow: var(--shadow-pop, 0 12px 32px rgb(20 20 20 / 0.1));
+  font-size: 12px;
+  color: var(--ink, #141414);
+}
+.lamp-analysis-table {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.lamp-analysis-table summary {
+  cursor: pointer;
+  color: var(--muted, #6b6a65);
+}
+.lamp-analysis-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+.lamp-analysis-table th,
+.lamp-analysis-table td {
+  text-align: right;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line, #e6e5e1);
+}
+.lamp-analysis-table th:first-child,
+.lamp-analysis-table td:first-child {
+  text-align: left;
+}
+.lamp-analysis-ai {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 16px;
+  border-style: dashed;
+}
+@media (max-width: 900px) {
+  .lamp-analysis-members {
+    grid-template-columns: 1fr;
+  }
+}
+.lamp-analysis-raw-title {
+  margin: 24px 0 8px;
+}

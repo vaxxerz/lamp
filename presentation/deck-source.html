@@ -1,0 +1,1147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Lamp. Summit Keynote</title>
+<link rel="preload" as="image" href="assets/dashboard.jpg" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+/* ==========================================================================
+   Lamp. Keynote — "Illuminate the Invisible"
+   두 개의 장면: NIGHT(어둠 — 보이지 않는 것) / PAPER(빛 — 드러난 증거)
+   그리드: 1920×1080, 좌우 여백 128, 12컬럼(거터 32)
+   ========================================================================== */
+:root {
+  --night: #09090b; --night-2: #121216; --night-3: #1b1b21;
+  --on-night: #f4f4f5; --on-night-2: #c4c4cc; --dim: #8a8a94; --night-line: rgb(255 255 255 / .10);
+  --paper: #f5f5f3; --white: #ffffff; --ink: #18181b; --ink-2: #3f3f46; --muted: #6b6b75; --line: #e4e4e7;
+  --indigo: #4f46e5; --indigo-ink: #4338ca; --indigo-soft: #eef2ff; --indigo-glow: #818cf8;
+  --a: #eab308; --a-soft: #fef08a; --b: #22c55e; --b-soft: #bbf7d0; --c: #3b82f6; --c-soft: #bfdbfe; --d: #ec4899; --d-soft: #fbcfe8;
+  --ok: #15803d; --ok-soft: #dcfce7; --warn: #b45309; --warn-soft: #fef3c7; --bad: #dc2626;
+  --ease: cubic-bezier(.2,.7,.2,1);
+  --m: 128px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; }
+body { font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", "Noto Sans KR", system-ui, sans-serif; word-break: keep-all; -webkit-font-smoothing: antialiased; overflow: hidden; color: var(--ink); }
+h1, h2, h3, p, ol, ul { margin: 0; padding: 0; }
+img { display: block; }
+
+/* ---------- 무대 ---------- */
+.stage { position: fixed; left: 50%; top: 50%; width: 1920px; height: 1080px; transform: translate(-50%, -50%) scale(var(--s, .5)); overflow: hidden; background: var(--night); }
+.slide { position: absolute; inset: 0; visibility: hidden; overflow: hidden; }
+.slide.active { visibility: visible; animation: in .5s var(--ease) both; }
+@keyframes in { from { opacity: 0; } to { opacity: 1; } }
+.night { background: var(--night); color: var(--on-night); }
+.paper { background: var(--paper); color: var(--ink); }
+.white { background: var(--white); color: var(--ink); }
+
+/* 단계 공개: data-s="n" → 그 단계부터 보임 / data-only="n" → 그 단계에서만 */
+[data-s] { opacity: 0; transform: translateY(18px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+[data-s].on { opacity: 1; transform: none; }
+[data-only] { opacity: 0; transition: opacity .45s var(--ease); pointer-events: none; }
+[data-only].on { opacity: 1; }
+
+/* ---------- 타이포 ---------- */
+.eyebrow { font-size: 22px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.night .eyebrow { color: var(--dim); }
+.eyebrow b { color: var(--indigo); font-weight: 700; }
+.night .eyebrow b { color: var(--indigo-glow); }
+.hero { font-size: 148px; font-weight: 800; letter-spacing: -.055em; line-height: 1.04; }
+.h1 { font-size: 92px; font-weight: 800; letter-spacing: -.045em; line-height: 1.1; }
+.h2 { font-size: 72px; font-weight: 750; letter-spacing: -.04em; line-height: 1.14; }
+.sub { font-size: 36px; font-weight: 500; letter-spacing: -.02em; line-height: 1.45; color: var(--ink-2); }
+.night .sub { color: var(--on-night-2); }
+.note { font-size: 24px; line-height: 1.5; color: var(--muted); letter-spacing: -.01em; }
+.night .note { color: var(--dim); }
+.src { font-size: 20px; color: var(--muted); letter-spacing: -.005em; }
+.night .src { color: var(--dim); }
+.mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace; letter-spacing: -.01em; }
+.hl { color: var(--indigo); }
+.night .hl { color: var(--indigo-glow); }
+.faint { color: var(--dim); }
+
+/* 공통 위치 */
+.pad { position: absolute; left: var(--m); right: var(--m); top: 112px; }
+.folio { position: absolute; left: var(--m); right: var(--m); bottom: 48px; display: flex; justify-content: space-between; font-size: 18px; color: var(--muted); letter-spacing: .02em; }
+.night .folio { color: #55555e; }
+.tag { display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px; border-radius: 999px; font-size: 20px; font-weight: 600; border: 1px solid var(--line); color: var(--ink-2); background: var(--white); white-space: nowrap; }
+.night .tag { background: transparent; border-color: var(--night-line); color: var(--on-night-2); }
+.tag i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; display: inline-block; }
+.tag.live { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+.tag.plan { color: var(--muted); border-style: dashed; }
+.tag.illus { color: var(--warn); border-color: #fde68a; background: #fffbeb; }
+.night .tag.illus { color: #fbbf24; border-color: rgb(251 191 36 / .35); background: transparent; }
+
+/* 제품 화면 프레임 */
+.frame { position: absolute; border-radius: 16px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px rgb(24 24 27 / .08), 0 30px 80px -20px rgb(24 24 27 / .28); }
+.frame .bar { height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid var(--line); background: #fafafa; font-size: 17px; color: var(--muted); }
+.frame .bar b { color: var(--ink); font-weight: 600; }
+.frame .bar .dot { width: 10px; height: 10px; border-radius: 50%; background: #e4e4e7; }
+.frame img { width: 100%; height: auto; }
+.night .frame { box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 40px 120px -20px rgb(79 70 229 / .45); }
+
+/* =========================================================
+   S1 콜드 오픈
+   ========================================================= */
+.s-open .pad { top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+.s-open .hero + .hero { margin-top: 12px; }
+
+/* S2 동료평가지 */
+.form { position: absolute; right: var(--m); top: 120px; width: 860px; height: 840px; background: #fff; border-radius: 6px; box-shadow: 0 1px 0 rgb(24 24 27 / .06), 0 24px 60px -24px rgb(24 24 27 / .25); padding: 56px 64px; color: #27272a; }
+.form h4 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -.02em; text-align: center; }
+.form .meta { display: flex; justify-content: space-between; margin-top: 28px; font-size: 20px; color: var(--muted); border-bottom: 2px solid #27272a; padding-bottom: 14px; }
+.form table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 24px; }
+.form th { font-size: 19px; font-weight: 600; color: var(--muted); padding: 18px 0 12px; text-align: center; }
+.form th:first-child { text-align: left; }
+.form td { padding: 22px 0; border-bottom: 1px solid var(--line); text-align: center; }
+.form td:first-child { text-align: left; font-weight: 600; }
+.circ { display: inline-grid; place-items: center; width: 52px; height: 52px; border: 2.5px solid var(--indigo); border-radius: 50%; color: var(--indigo); font-weight: 700; font-family: "Pretendard Variable"; transform: rotate(-6deg); }
+.form .opinion { margin-top: 34px; font-size: 22px; color: var(--muted); }
+.form .opinion span { display: block; margin-top: 10px; font-size: 28px; color: var(--indigo); font-style: italic; transform: rotate(-1deg); transform-origin: left; }
+.form-q { position: absolute; right: var(--m); top: 120px; width: 860px; height: 840px; display: grid; place-items: center; background: rgb(9 9 11 / .78); border-radius: 6px; color: #fff; text-align: center; }
+.form-q p { font-size: 64px; font-weight: 800; letter-spacing: -.04em; line-height: 1.2; }
+
+/* S3 숫자 */
+.bignum { font-size: 360px; font-weight: 850; letter-spacing: -.07em; line-height: .9; font-variant-numeric: tabular-nums; }
+.bignum small { font-size: 140px; letter-spacing: -.04em; }
+
+/* S4 에디토리얼 */
+.claims { position: absolute; left: var(--m); right: var(--m); top: 330px; }
+.claim { display: grid; grid-template-columns: 140px 1fr 520px; align-items: baseline; padding: 34px 0; border-top: 1px solid #d4d4d8; }
+.claim:last-child { border-bottom: 1px solid #d4d4d8; }
+.claim .n { font-size: 28px; font-weight: 700; color: var(--indigo); }
+.claim .t { font-size: 60px; font-weight: 750; letter-spacing: -.04em; }
+.claim .src { text-align: right; font-size: 21px; line-height: 1.45; }
+
+/* S5 어둠 속 증거 */
+.frag { position: absolute; font-size: 26px; font-weight: 500; color: rgb(244 244 245 / .14); white-space: nowrap; letter-spacing: -.01em; transition: color 1.2s var(--ease), text-shadow 1.2s var(--ease); }
+.frag b { font-weight: 700; }
+.s-dark.s1 .frag { color: rgb(244 244 245 / .8); }
+.s-dark.s1 .frag.k { color: #fff; text-shadow: 0 0 24px rgb(129 140 248 / .7); }
+.beam { position: absolute; inset: 0; background: radial-gradient(ellipse 900px 620px at 50% 46%, rgb(129 140 248 / .22), rgb(129 140 248 / .06) 45%, transparent 70%); opacity: 0; transition: opacity 1.4s var(--ease); }
+.s-dark.s1 .beam { opacity: 1; }
+.s-dark .msg { position: absolute; left: 0; right: 0; top: 400px; text-align: center; }
+
+/* S5b 주제 — 등잔 밑이 어둡다 */
+.s-proverb .pad { width: 900px; }
+.s-proverb .prov { font-size: 132px; font-weight: 800; letter-spacing: -.055em; line-height: 1.06; margin-top: 40px; }
+.s-proverb .mean { margin-top: 36px; font-size: 32px; line-height: 1.55; color: var(--on-night-2); letter-spacing: -.015em; }
+.s-proverb .map { position: absolute; left: var(--m); top: 700px; width: 820px; }
+.s-proverb .map .row { display: grid; grid-template-columns: 210px 1fr; padding: 22px 0; border-top: 1px solid var(--night-line); font-size: 30px; letter-spacing: -.02em; }
+.s-proverb .map .row:last-child { border-bottom: 1px solid var(--night-line); }
+.s-proverb .map .k { color: var(--dim); font-weight: 600; font-size: 24px; letter-spacing: .02em; padding-top: 4px; }
+.s-proverb .map .v { color: var(--on-night); font-weight: 650; }
+.s-proverb .lampfig { position: absolute; right: 90px; top: 90px; width: 860px; height: 900px; }
+.s-proverb .lampfig svg { width: 100%; height: 100%; overflow: visible; }
+.s-proverb .lit { fill: rgb(244 244 245 / .82); font-size: 27px; font-weight: 600; }
+.s-proverb .undr { fill: rgb(244 244 245 / .16); font-size: 26px; font-weight: 600; transition: fill 1.2s var(--ease); }
+.s-proverb.s2 .undr { fill: #fff; }
+.s-proverb .shadow { transition: opacity 1.2s var(--ease); }
+.s-proverb.s2 .shadow { opacity: 0; }
+.s-proverb .spot { opacity: 0; transition: opacity 1.2s var(--ease); }
+.s-proverb.s2 .spot { opacity: 1; }
+.s-proverb .cap { position: absolute; right: 90px; bottom: 70px; width: 860px; text-align: center; }
+
+/* 아키텍처 상세 (Lamp. 시스템 아키텍처 아티팩트) */
+.arch-sheet { --bg:#fbfaf7; --paper:#ffffff; --fg:#1d1f24; --muted:#5d636e; --line:#8a909b; --card:#ffffff; --chip:#f6f4ef; --chip-line:#e2ddd2;
+  --lamp:#d98a1c; --vercel:#2b2f36; --supa:#2f9e6b; --google:#2f6fd6; --ai:#7a4fd0; --sec:#c2413b;
+  --mono: ui-monospace, Menlo, monospace; position:absolute; left:var(--m); right:var(--m); top:236px; bottom:40px; background:var(--paper); border:1px solid var(--chip-line); border-radius:20px; padding:18px 24px; }
+.arch-sheet .arch-svg { display:block; width:100%; height:100%; font-family:inherit; }
+.arch-legend { position:absolute; right:var(--m); top:112px; display:flex; gap:28px; font-size:20px; color:var(--muted); }
+.arch-legend i { display:inline-block; width:34px; border-top:2px solid #8a909b; vertical-align:middle; margin-right:8px; }
+.arch-legend i.d { border-top-style:dashed; }
+.arch-sheet .a-frame { fill: none; stroke-width: 1.6; }
+.arch-sheet .a-f-vercel { stroke: var(--vercel); } .arch-sheet .a-f-supa { stroke: var(--supa); } .arch-sheet .a-f-ext { stroke: var(--ai); }
+.arch-sheet .a-f-ci { stroke: var(--fg); } .arch-sheet .a-f-bg { stroke: var(--lamp); stroke-dasharray: 6 5; }
+.arch-sheet .a-pill-t { fill: #fff; font-size: 13px; font-weight: 700; }
+.arch-sheet .a-p-vercel { fill: var(--vercel); } .arch-sheet .a-p-supa { fill: var(--supa); } .arch-sheet .a-p-ext { fill: var(--ai); } .arch-sheet .a-p-ci { fill: var(--fg); } .arch-sheet .a-p-bg { fill: var(--lamp); }
+.arch-sheet .a-ftitle { font-size: 13.5px; font-weight: 700; }
+.arch-sheet .a-c-vercel { fill: var(--vercel); } .arch-sheet .a-c-supa { fill: var(--supa); } .arch-sheet .a-c-ai { fill: var(--ai); } .arch-sheet .a-c-google { fill: var(--google); } .arch-sheet .a-c-lamp { fill: var(--lamp); } .arch-sheet .a-c-fg { fill: var(--fg); } .arch-sheet .a-c-sec { fill: var(--sec); }
+.arch-sheet .a-card { fill: var(--card); stroke-width: 1.4; }
+.arch-sheet .a-s-vercel { stroke: var(--vercel); } .arch-sheet .a-s-supa { stroke: var(--supa); } .arch-sheet .a-s-ai { stroke: var(--ai); } .arch-sheet .a-s-google { stroke: var(--google); } .arch-sheet .a-s-lamp { stroke: var(--lamp); } .arch-sheet .a-s-fg { stroke: var(--fg); }
+.arch-sheet .a-dash { stroke-dasharray: 5 4; }
+.arch-sheet .a-chip { fill: var(--chip); stroke: var(--chip-line); stroke-width: 1; }
+.arch-sheet .a-bt { font-size: 15px; font-weight: 700; fill: var(--fg); }
+.arch-sheet .a-bs { font-size: 11.5px; fill: var(--muted); }
+.arch-sheet .a-ct { font-size: 12.5px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+.arch-sheet .a-cs { font-size: 10.5px; fill: var(--muted); text-anchor: middle; }
+.arch-sheet .a-mono { font-family: var(--mono); }
+.arch-sheet .a-ut { font-size: 14px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+.arch-sheet .a-us { font-size: 11px; fill: var(--muted); text-anchor: middle; }
+.arch-sheet .a-lbl { font-size: 11px; fill: var(--muted); }
+.arch-sheet .a-lbl-b { font-size: 11px; font-weight: 700; }
+/* 선 위에 걸치는 글자 뒤를 배경색으로 비워 선과 겹치지 않게 */
+.arch-sheet .a-ftitle, .arch-sheet .a-lbl, .arch-sheet .a-lbl-b { paint-order: stroke; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
+.arch-sheet .a-ftitle tspan, .arch-sheet .a-lbl tspan, .arch-sheet .a-lbl-b tspan { paint-order: stroke; }
+.arch-sheet .a-ln { fill: none; stroke-width: 1.6; }
+.arch-sheet .a-l-ink { stroke: var(--line); } .arch-sheet .a-l-supa { stroke: var(--supa); } .arch-sheet .a-l-ai { stroke: var(--ai); } .arch-sheet .a-l-google { stroke: var(--google); } .arch-sheet .a-l-lamp { stroke: var(--lamp); }
+.arch-sheet .a-badge-g { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.arch-sheet .a-sec-panel { fill: var(--chip); stroke: var(--chip-line); }
+.arch-sheet .a-bullet { font-size: 11.5px; fill: var(--fg); }
+
+/* S6 공개 */
+.s-reveal .word { position: absolute; left: 0; right: 0; top: 150px; text-align: center; }
+.s-reveal .word .logo { font-size: 200px; font-weight: 800; letter-spacing: -.06em; line-height: 1; }
+.s-reveal .word .logo span { color: var(--indigo-glow); }
+.s-reveal .word .sub { margin-top: 36px; }
+.s-reveal .shot { position: absolute; left: 260px; right: 260px; top: 600px; perspective: 2400px; }
+.s-reveal .shot .frame { position: relative; transform: rotateX(14deg); transform-origin: top center; }
+.s-reveal .glow { position: absolute; left: 50%; top: 520px; width: 1500px; height: 600px; transform: translateX(-50%); background: radial-gradient(ellipse at center, rgb(79 70 229 / .45), transparent 65%); filter: blur(20px); }
+
+/* S7 제품 여정 */
+.journey { position: absolute; left: var(--m); top: 380px; width: 470px; }
+.journey li { list-style: none; display: grid; grid-template-columns: 56px 1fr; padding: 18px 0; border-top: 1px solid #d4d4d8; color: #a1a1aa; transition: color .4s var(--ease); }
+.journey li:last-child { border-bottom: 1px solid #d4d4d8; }
+.journey .n { font-size: 22px; font-weight: 700; padding-top: 8px; }
+.journey .t { font-size: 38px; font-weight: 700; letter-spacing: -.03em; }
+.journey .d { font-size: 22px; margin-top: 4px; display: none; color: var(--muted); font-weight: 500; }
+.journey li.cur { color: var(--ink); }
+.journey li.cur .n { color: var(--indigo); }
+.journey li.cur .d { display: block; }
+.shots { position: absolute; left: 680px; right: 72px; top: 150px; height: 830px; }
+.shots .frame { left: 0; right: 0; top: 0; }
+.shots .cap { position: absolute; left: 0; bottom: -2px; }
+
+/* S8 문서 문제 */
+.gdoc { position: absolute; background: #fff; color: #27272a; border-radius: 12px; overflow: hidden; }
+.gdoc .gbar { height: 64px; border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 28px; gap: 14px; font-size: 21px; color: var(--muted); }
+.gdoc .gbar b { color: var(--ink); font-weight: 600; }
+.gdoc .body { padding: 44px 56px; font-size: 30px; line-height: 2; letter-spacing: -.015em; }
+.gdoc .body p + p { margin-top: 18px; }
+.cur-flag { position: relative; display: inline-block; width: 3px; height: 38px; vertical-align: -6px; margin: 0 2px; }
+.cur-flag em { position: absolute; left: 0; bottom: 100%; font-style: normal; font-size: 16px; font-weight: 700; color: #fff; padding: 2px 8px; border-radius: 4px 4px 4px 0; white-space: nowrap; line-height: 1.4; }
+.ink-a { color: inherit; transition: color .8s var(--ease), background .8s; }
+.vh { position: absolute; right: var(--m); top: 330px; width: 520px; }
+.vh .row { padding: 28px 32px; border-radius: 12px; background: var(--night-2); border: 1px solid var(--night-line); }
+.vh .row + .row { margin-top: 14px; }
+.vh .t { font-size: 26px; font-weight: 700; }
+.vh .m { font-size: 21px; color: var(--dim); margin-top: 6px; }
+.avs { display: flex; margin-top: 16px; }
+.avs span { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--night-2); margin-left: -8px; display: grid; place-items: center; font-size: 15px; font-weight: 700; color: #18181b; }
+.avs span:first-child { margin-left: 0; }
+
+/* S9 제안 모드 애니메이션 */
+.s-attr .gdoc { left: var(--m); top: 300px; width: 1040px; height: 500px; box-shadow: 0 0 0 1px var(--line), 0 30px 70px -30px rgb(24 24 27 / .25); }
+.sg { position: relative; border-radius: 3px; transition: color .6s var(--ease), background .6s var(--ease), text-decoration-color .6s; }
+.sg.a { color: #a16207; text-decoration: underline 2px #eab308; text-underline-offset: 6px; }
+.sg.b { color: #15803d; text-decoration: underline 2px #22c55e; text-underline-offset: 6px; }
+.sg { opacity: 0; }
+.s-attr.s1 .sg { opacity: 1; }
+.s-attr.s4 .sg { color: #27272a; text-decoration-color: transparent; }
+.s-attr.s4 .sg.a { background: var(--a-soft); }
+.s-attr.s4 .sg.b { background: var(--b-soft); }
+.flag { position: absolute; left: -2px; top: -30px; font-size: 16px; font-weight: 700; line-height: 1.5; padding: 0 8px; border-radius: 4px 4px 4px 0; color: #fff; white-space: nowrap; transition: opacity .4s; }
+.sg.a .flag { background: var(--a); } .sg.b .flag { background: var(--b); }
+.s-attr.s4 .flag { opacity: 0; }
+.stamp { position: absolute; left: 0; top: calc(100% + 10px); font-size: 18px; font-weight: 700; padding: 6px 12px; border-radius: 8px; background: var(--ink); color: #fff; white-space: nowrap; opacity: 0; transition: opacity .5s var(--ease); }
+.s-attr.s3 .stamp { opacity: 1; }
+.s-attr.s4 .stamp { background: var(--ok); }
+.stillchip { position: absolute; right: 24px; top: 84px; font-size: 18px; font-weight: 600; color: var(--muted); }
+.rail { position: absolute; left: 1240px; right: var(--m); top: 300px; }
+.rail li { list-style: none; display: grid; grid-template-columns: 52px 1fr; align-items: start; padding: 18px 0; color: #a1a1aa; transition: color .4s; }
+.rail .n { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #d4d4d8; display: grid; place-items: center; font-size: 17px; font-weight: 700; transition: all .4s; }
+.rail .t { font-size: 32px; font-weight: 700; letter-spacing: -.025em; line-height: 1.1; padding-top: 1px; }
+.rail .d { font-size: 21px; font-weight: 500; margin-top: 8px; color: var(--muted); display: none; line-height: 1.45; }
+.rail li.done { color: var(--ink-2); }
+.rail li.done .n { border-color: var(--ink-2); background: var(--ink-2); color: #fff; }
+.rail li.cur { color: var(--ink); }
+.rail li.cur .n { border-color: var(--indigo); background: var(--indigo); color: #fff; }
+.rail li.cur .d { display: block; }
+.contrib { position: absolute; left: var(--m); top: 850px; width: 1040px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.contrib .r { display: grid; grid-template-columns: 96px 1fr 90px; white-space: nowrap; align-items: center; gap: 16px; font-size: 22px; font-weight: 600; }
+.contrib .bar { height: 14px; border-radius: 7px; background: #e4e4e7; overflow: hidden; }
+.contrib .bar span { display: block; height: 100%; width: 0; transition: width 1s var(--ease) .2s; border-radius: 7px; }
+.s-attr.s5 .contrib .ra span { width: 58%; } .s-attr.s5 .contrib .rb span { width: 42%; }
+.contrib .num { text-align: right; font-variant-numeric: tabular-nums; }
+.apis { position: absolute; left: 1240px; right: var(--m); bottom: 64px; font-size: 18px; color: var(--muted); line-height: 1.6; }
+
+/* S10 신뢰도 */
+.ladder { position: absolute; left: var(--m); top: 330px; width: 760px; }
+.ladder .r { padding: 26px 0; border-top: 1px solid #d4d4d8; display: grid; grid-template-columns: 1fr 200px; align-items: center; gap: 24px; }
+.ladder .r:last-child { border-bottom: 1px solid #d4d4d8; }
+.ladder .k { font-size: 38px; font-weight: 750; letter-spacing: -.03em; }
+.ladder .k small { font-size: 20px; font-weight: 600; color: var(--muted); margin-left: 10px; letter-spacing: .02em; }
+.ladder .d { font-size: 22px; color: var(--muted); margin-top: 4px; }
+.meter { display: flex; gap: 6px; justify-content: flex-end; }
+.meter i { width: 36px; height: 14px; border-radius: 3px; background: #e4e4e7; }
+.meter i.f { background: var(--indigo); }
+.s-conf .frame { right: var(--m); top: 300px; width: 840px; }
+
+/* S11 점수 */
+.conv { position: absolute; left: var(--m); top: 340px; width: 780px; }
+.conv .r { display: grid; grid-template-columns: 1fr 60px 150px; align-items: baseline; padding: 22px 0; border-top: 1px solid #d4d4d8; font-size: 30px; font-weight: 600; letter-spacing: -.02em; }
+.conv .r:last-of-type { border-bottom: 1px solid #d4d4d8; }
+.conv .r .arrow { color: #a1a1aa; text-align: center; }
+.conv .r .p { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+.conv .r small { display: block; font-size: 20px; color: var(--muted); font-weight: 500; margin-top: 4px; }
+.chart { position: absolute; right: var(--m); top: 300px; width: 820px; height: 600px; }
+.weights { position: absolute; left: var(--m); right: var(--m); bottom: 110px; display: flex; gap: 28px; align-items: center; font-size: 24px; color: var(--ink-2); font-weight: 600; }
+.weights .sep { color: #a1a1aa; }
+
+/* S12 AI 파이프라인 */
+.pipe { position: absolute; left: var(--m); right: var(--m); top: 400px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+.pipe .node { position: relative; padding: 0 28px 0 0; }
+.pipe .node .k { font-size: 20px; font-weight: 600; letter-spacing: .12em; color: var(--dim); }
+.pipe .node .t { font-size: 40px; font-weight: 750; letter-spacing: -.03em; margin-top: 18px; line-height: 1.15; }
+.pipe .node .d { font-size: 22px; color: var(--dim); margin-top: 14px; line-height: 1.5; }
+.pipe .node .line { position: absolute; left: 0; right: 0; top: -40px; height: 2px; background: var(--night-line); }
+.pipe .node .line::after { content: ""; position: absolute; left: 0; top: -7px; width: 16px; height: 16px; border-radius: 50%; background: var(--night-3); border: 2px solid #3f3f46; }
+.pipe .node.on .line { background: linear-gradient(90deg, var(--indigo-glow), rgb(129 140 248 / .25)); }
+.pipe .node.on .line::after { background: var(--indigo-glow); border-color: var(--indigo-glow); box-shadow: 0 0 20px var(--indigo-glow); }
+.pipe .node.ai .t { color: var(--indigo-glow); }
+.guards { position: absolute; left: var(--m); right: var(--m); top: 760px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+.guards div { border-top: 1px solid var(--night-line); padding-top: 24px; font-size: 30px; font-weight: 650; letter-spacing: -.02em; }
+.guards small { display: block; font-size: 21px; color: var(--dim); font-weight: 500; margin-top: 8px; }
+
+/* S13 리포트 히어로 */
+.s-report .frame { left: 560px; top: 100px; width: 680px; }
+.callouts { position: absolute; left: 1240px; right: var(--m); top: 100px; height: 887px; }
+.co { position: absolute; left: 0; right: 0; display: grid; grid-template-columns: 96px 1fr; align-items: center; transform: translateY(-50%); }
+.co .ln { height: 2px; background: var(--indigo); position: relative; }
+.co .ln::before { content: ""; position: absolute; left: -6px; top: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--indigo); }
+.co .tx { padding-left: 20px; font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }
+.co .tx small { display: block; font-size: 20px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+.s-report .lead { position: absolute; left: var(--m); top: 112px; width: 380px; }
+
+/* S14 아키텍처 */
+.arch { position: absolute; left: var(--m); top: 290px; width: 1664px; height: 560px; }
+.arch svg { position: absolute; inset: 0; overflow: visible; }
+.box { position: absolute; border: 1px solid var(--night-line); border-radius: 14px; background: var(--night-2); padding: 22px 26px; }
+.box .k { font-size: 17px; font-weight: 600; letter-spacing: .12em; color: var(--dim); text-transform: uppercase; }
+.box .t { font-size: 30px; font-weight: 750; letter-spacing: -.025em; margin-top: 8px; }
+.box .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.box .chips span { font-size: 19px; padding: 6px 12px; border-radius: 8px; background: var(--night-3); color: var(--on-night-2); border: 1px solid var(--night-line); }
+.box.core { border-color: rgb(129 140 248 / .45); background: linear-gradient(180deg, rgb(79 70 229 / .14), var(--night-2) 60%); }
+.box .lock { color: var(--indigo-glow); }
+.flow { stroke: #52525b; stroke-width: 2; fill: none; }
+.flow.hot { stroke: var(--indigo-glow); stroke-dasharray: 8 10; animation: dash 1.2s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -36; } }
+.sec { position: absolute; left: var(--m); right: var(--m); bottom: 92px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px; }
+.sec div { font-size: 22px; font-weight: 650; letter-spacing: -.015em; color: var(--on-night); border-top: 1px solid var(--night-line); padding-top: 16px; }
+.sec small { display: block; font-size: 18px; font-weight: 500; color: var(--dim); margin-top: 6px; line-height: 1.4; }
+
+/* S15 도입 */
+.tl { position: absolute; left: var(--m); right: var(--m); top: 380px; display: grid; grid-template-columns: repeat(5, 1fr); }
+.tl .st { position: relative; padding-top: 44px; padding-right: 28px; }
+.tl .st::before { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 2px; background: #d4d4d8; }
+.tl .st::after { content: ""; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); border: 3px solid var(--indigo); }
+.tl .w { font-size: 20px; font-weight: 700; color: var(--indigo); letter-spacing: .04em; }
+.tl .t { font-size: 34px; font-weight: 750; letter-spacing: -.03em; margin-top: 10px; line-height: 1.2; }
+.tl .d { font-size: 21px; color: var(--muted); margin-top: 10px; line-height: 1.45; }
+.tl .who { font-size: 18px; font-weight: 600; color: var(--ink-2); margin-top: 14px; }
+.lower { position: absolute; left: var(--m); right: var(--m); top: 760px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+.lower .t { font-size: 32px; font-weight: 750; letter-spacing: -.025em; margin-top: 14px; }
+.lower .d { font-size: 22px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+/* S16 마무리 */
+.s-close .pad { top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+.s-close .hero { font-size: 160px; }
+.s-close .l2 { color: #3f3f46; transition: color 1.2s var(--ease), text-shadow 1.2s var(--ease); }
+.s-close.s1 .l2 { color: var(--on-night); }
+.s-close.s1 .l2 .hl { text-shadow: 0 0 40px rgb(129 140 248 / .6); }
+
+/* 부록 */
+table.ref { width: 100%; border-collapse: collapse; font-size: 22px; margin-top: 40px; }
+table.ref th { text-align: left; font-size: 18px; font-weight: 600; color: var(--muted); padding: 12px 16px; border-bottom: 1px solid #a1a1aa; }
+table.ref td { padding: 16px; border-bottom: 1px solid #e4e4e7; vertical-align: top; line-height: 1.45; color: var(--ink-2); }
+table.ref td:first-child { font-weight: 650; color: var(--ink); width: 34%; }
+.st-live { color: var(--ok); font-weight: 700; } .st-part { color: var(--warn); font-weight: 700; } .st-plan { color: var(--muted); font-weight: 700; }
+
+/* ---------- 컨트롤 ---------- */
+.progress { position: fixed; left: 0; bottom: 0; height: 3px; width: 0; background: var(--indigo-glow); z-index: 20; transition: width .4s var(--ease); }
+.hud { position: fixed; right: 14px; bottom: 14px; display: flex; gap: 6px; z-index: 20; opacity: 0; transition: opacity .25s; font: 600 13px/1 "Pretendard Variable", system-ui; }
+body:hover .hud, body.show-hud .hud { opacity: 1; }
+.hud button, .hud span { height: 32px; min-width: 32px; padding: 0 11px; border-radius: 8px; border: 1px solid rgb(255 255 255 / .14); background: rgb(24 24 27 / .82); color: #e4e4e7; display: inline-flex; align-items: center; justify-content: center; font: inherit; white-space: nowrap; backdrop-filter: blur(8px); font-variant-numeric: tabular-nums; }
+.hud button { cursor: pointer; }
+.hud button:hover { background: #27272a; }
+.notes { position: fixed; left: 50%; bottom: 56px; transform: translateX(-50%); width: min(920px, calc(100vw - 24px)); max-height: 42vh; overflow: auto; background: rgb(24 24 27 / .95); color: #f4f4f5; border: 1px solid rgb(255 255 255 / .12); border-radius: 12px; padding: 16px 20px; font: 15px/1.75 "Pretendard Variable", system-ui; z-index: 21; display: none; }
+.notes b { color: #a5b4fc; }
+body.show-notes .notes { display: block; }
+@media (max-width: 640px) { .hud .opt { display: none; } .hud { opacity: .85; } }
+
+@media print {
+  html, body { background: #fff; overflow: visible; height: auto; }
+  .stage { position: static; transform: none; width: 1920px; height: auto; overflow: visible; }
+  .slide { position: relative; visibility: visible; height: 1080px; break-after: page; animation: none !important; }
+  [data-s], [data-only] { transition: none !important; }
+  .progress, .hud, .notes { display: none !important; }
+  @page { size: 1920px 1080px; margin: 0; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body class="hide-rd">
+<main class="stage" id="stage">
+
+<!-- ================= ACT 1 · PROBLEM ================= -->
+
+<!-- 01 콜드 오픈 -->
+<section class="slide night s-open" data-time="20" data-notes="(조명이 어두운 상태에서 시작) 팀플이 끝났습니다. 결과물은 하나, 점수는 네 명 각자에게 나가야 합니다. 그렇다면 조원 평가는 어떻게 이루어질까요? — 잠깐 멈추고 다음 장으로.">
+  <div class="pad">
+    <p class="eyebrow">Infosys Hackathon · <b>Summit</b> · 등잔 밑이 어둡다</p>
+    <p class="hero" style="margin-top:56px">팀플이 끝났습니다.</p>
+    <p class="hero" data-s="1"><span class="hl">조원 평가</span>는<br/>어떻게 이루어질까요?</p>
+  </div>
+  <p class="team" style="position:absolute;left:var(--m);bottom:96px;font-size:28px;font-weight:600;letter-spacing:-.01em;color:var(--on-night-2)">조민성 · 인시환 · 최완규</p>
+</section>
+
+<!-- 02 동료평가지 -->
+<section class="slide paper" data-time="45" data-notes="대부분의 수업에서 답은 이 종이 한 장, 동료평가지입니다. 결과물은 하나뿐이니 개인 점수를 나눌 근거가 이것밖에 없죠. 그런데 실제로 걷어 보면 이렇습니다. 모두 5점, '다들 열심히 했습니다.' (클릭) 이 중 누가 실제로 일했을까요? 교수님은 알 방법이 없습니다.">
+  <div class="pad" style="width:720px">
+    <p class="eyebrow"><b>01</b> 문제</p>
+    <h2 class="h1" style="margin-top:28px">동료평가지는<br/>모두에게<br/><span class="hl">5점</span>을 줍니다.</h2>
+    <p class="sub" style="margin-top:40px">결과물은 하나, 개인 점수의 근거는<br/>종이 한 장뿐입니다.</p>
+  </div>
+  <div class="form">
+    <h4>팀원 상호평가서</h4>
+    <div class="meta"><span>과목 · 팀 프로젝트</span><span>평가자: ○○○</span></div>
+    <table>
+      <thead><tr><th>팀원</th><th>참여도</th><th>기여도</th><th>협조성</th></tr></thead>
+      <tbody>
+        <tr><td>팀원 A</td><td><span class="circ">5</span></td><td><span class="circ">5</span></td><td><span class="circ">5</span></td></tr>
+        <tr><td>팀원 B</td><td><span class="circ">5</span></td><td><span class="circ">5</span></td><td><span class="circ">5</span></td></tr>
+        <tr><td>팀원 C</td><td><span class="circ">5</span></td><td><span class="circ">5</span></td><td><span class="circ">5</span></td></tr>
+        <tr><td>팀원 D</td><td><span class="circ">5</span></td><td><span class="circ">5</span></td><td><span class="circ">5</span></td></tr>
+      </tbody>
+    </table>
+    <p class="opinion">기타 의견<span>“다들 열심히 했습니다.”</span></p>
+  </div>
+  <div class="form-q" data-s="1"><p>이 중 누가<br/>실제로 일했을까요?</p></div>
+  <div class="folio"><span>재현한 예시 양식</span><span>02</span></div>
+</section>
+
+<!-- 03 데이터 -->
+<section class="slide white" data-time="35" data-notes="이건 저희만의 불만이 아닙니다. 알바몬이 대학생 940명에게 물었을 때, 캠퍼스 꼴불견 1위가 조별과제 무임승차였습니다. 37.4%. 2013년 1,175명 조사에서도 여전히 1위였습니다. 오래된 문제인데, 평가 방식은 그대로입니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>01</b> 문제 · 공개 설문</p>
+  </div>
+  <div style="position:absolute;left:var(--m);top:290px">
+    <p class="bignum">37.4<small>%</small></p>
+  </div>
+  <div style="position:absolute;left:var(--m);right:var(--m);top:700px;display:grid;grid-template-columns:1fr 520px;gap:64px;align-items:end">
+    <p class="h2">대학생이 꼽은 꼴불견 1위,<br/><span class="hl">조별과제 무임승차</span></p>
+    <div>
+      <p class="sub" style="font-size:30px">2013년 조사에서도 <b style="color:var(--ink)">여전히 1위</b></p>
+      <p class="src" style="margin-top:14px">알바몬 대학생 940명 설문 (2007, 파이낸셜뉴스 보도)<br/>알바몬 대학생 1,175명 설문 (노컷뉴스 2013.6.18 보도, 19.9%)</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 왜 동료평가는 부족한가 -->
+<section class="slide paper" data-time="40" data-notes="평가지가 부족한 이유는 연구가 이미 말해 줍니다. 첫째, 친분과 압박이 점수가 됩니다. 모두 같은 점수를 주는 담합도 관찰됩니다. 둘째, 3~6명 팀에서는 동료평가 점수의 평균 자체가 통계적으로 의미를 갖기 어렵다는 2024년 국내 연구가 있습니다. 셋째, 학기 말에 한 번, 기억에 의존합니다. 연구는 프로젝트 도중 여러 번 평가해야 태만이 줄어든다고 말합니다. 즉 필요한 건 '과정의 기록'입니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>01</b> 문제 · 구조적 한계</p>
+    <h2 class="h2" style="margin-top:24px">평가지는 <span class="hl">기억</span>을 묻습니다. 기록이 아니라.</h2>
+  </div>
+  <div class="claims">
+    <div class="claim" data-s="1"><span class="n">01</span><span class="t">친분이 점수가 됩니다.</span><span class="src">Griffith University 동료평가 가이드<br/>— 친분·압박 편향, 동일 점수 담합</span></div>
+    <div class="claim" data-s="2"><span class="n">02</span><span class="t">3~6명 팀에선 평균이 무의미합니다.</span><span class="src">장현재 (2024), 공학교육연구 27(1)<br/>— 소규모 팀 산술평균의 통계적 한계</span></div>
+    <div class="claim" data-s="3"><span class="n">03</span><span class="t">학기 말, 단 한 번 묻습니다.</span><span class="src">Aggarwal &amp; O'Brien (2008)<br/>— 도중의 반복 평가가 태만을 줄인다</span></div>
+  </div>
+</section>
+
+<!-- ================= ACT 2 · REVEAL ================= -->
+
+<!-- 05 어둠 속 증거 -->
+<section class="slide night s-dark" data-time="30" data-notes="그런데 생각해 보면, 과정의 기록은 이미 있습니다. 문서를 고친 기록, 회의에 온 기록, 할 일을 끝낸 기록. 매일 팀원들 눈앞에서 만들어집니다. (클릭 — 빛) 다만 아무도 비추지 않았을 뿐입니다.">
+  <div class="beam"></div>
+  <span class="frag" style="left:150px;top:150px">문서 수정 <b>+412자</b> · 23:41</span>
+  <span class="frag k" style="left:1260px;top:130px">제안 수락 · 작성자 확정</span>
+  <span class="frag" style="left:620px;top:250px">회의 출석 · 3/14</span>
+  <span class="frag" style="left:1500px;top:300px">할 일 완료 · 팀원 확인</span>
+  <span class="frag k" style="left:210px;top:330px">회의록 작성</span>
+  <span class="frag" style="left:130px;top:720px">슬라이드 7장 수정</span>
+  <span class="frag" style="left:560px;top:840px">자료조사 파일 업로드</span>
+  <span class="frag k" style="left:1180px;top:780px">문서 수정 <b>+86자 / −40자</b></span>
+  <span class="frag" style="left:1440px;top:900px">할 일 생성 · 발표 리허설</span>
+  <span class="frag" style="left:900px;top:960px">회의 지각 · 5/02</span>
+  <span class="frag" style="left:1560px;top:620px">파일 버전 3</span>
+  <div class="msg">
+    <p class="h1">증거는 이미 있었습니다.</p>
+    <p class="h1" data-s="1" style="margin-top:10px"><span class="hl">기록되지 않았을 뿐.</span></p>
+  </div>
+  <p class="rd" style="left:460px;right:460px;top:640px;text-align:center">팀플을 하는 동안 문서 수정·회의 출석·할 일 완료 같은 기여는 매일 일어납니다. 문제는 이 과정이 평가에 쓸 수 있는 형태로 모이지 않는다는 점입니다.</p>
+</section>
+
+<!-- 06 주제 — 등잔 밑이 어둡다 -->
+<section class="slide night s-proverb" data-time="40" data-steps="2" data-notes="저희 주제는 '등잔 밑이 어둡다'입니다. 등잔은 방 전체를 밝히지만, 정작 바로 밑은 접시 그림자 때문에 어둡습니다. 가까이 있는 것일수록 오히려 보이지 않는다는 뜻이죠. (클릭) 팀플이 정확히 그렇습니다. 교수님이 비추는 곳은 멀리 있는 결과물과 발표, 그리고 평가지입니다. 그런데 누가 실제로 일했는지에 대한 증거는 가장 가까이, 팀이 매일 쓰는 문서와 회의와 할 일 안에 있습니다. 바로 등잔 밑입니다. (클릭) 그래서 저희 서비스의 이름은 Lamp.입니다. 멀리가 아니라, 바로 그 밑을 비춥니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Topic</b> 오늘의 주제</p>
+    <p class="prov">등잔 밑이<br/><span class="hl">어둡다.</span></p>
+    <p class="mean">등잔은 방을 밝히지만, 바로 밑은 그림자에 가려 어둡습니다.<br/>가까이 있는 것일수록 오히려 보이지 않습니다.</p>
+  </div>
+  <div class="map" data-s="1">
+    <div class="row"><span class="k">비추는 곳</span><span class="v" style="color:var(--on-night-2)">결과물 · 발표 · 학기 말 평가지</span></div>
+    <div class="row"><span class="k">등잔 밑</span><span class="v">매일 쓰는 문서 · 회의 · 할 일 — <span class="hl">누가 했는지의 증거</span></span></div>
+  </div>
+  <div class="lampfig">
+    <svg viewBox="0 0 860 900" aria-hidden="true">
+      <defs>
+        <radialGradient id="pvGlow" cx="430" cy="300" r="430" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#fde68a" stop-opacity=".55"/>
+          <stop offset=".25" stop-color="#818cf8" stop-opacity=".22"/>
+          <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="pvSpot" cx="430" cy="720" r="300" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#818cf8" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="pvShade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#09090b" stop-opacity=".98"/>
+          <stop offset="1" stop-color="#09090b" stop-opacity=".9"/>
+        </linearGradient>
+      </defs>
+      <circle cx="430" cy="300" r="430" fill="url(#pvGlow)"/>
+      <ellipse class="spot" cx="430" cy="720" rx="330" ry="170" fill="url(#pvSpot)"/>
+      <path class="shadow" d="M330 352 L430 352 L530 352 L760 860 L100 860 Z" fill="url(#pvShade)"/>
+      <!-- 비추는 곳 -->
+      <text class="lit" x="110" y="150">결과물</text>
+      <text class="lit" x="630" y="120">발표</text>
+      <text class="lit" x="70" y="380">평가지</text>
+      <text class="lit" x="660" y="390">최종 보고서</text>
+      <!-- 등잔 밑 -->
+      <text class="undr" x="300" y="560">문서 수정 +412자</text>
+      <text class="undr" x="460" y="640">회의 출석</text>
+      <text class="undr" x="250" y="700">할 일 완료</text>
+      <text class="undr" x="400" y="780">제안 · 작성자 확정</text>
+      <!-- 등잔 -->
+      <path d="M430 262 C446 284 452 300 446 314 C440 328 420 328 414 314 C408 300 414 284 430 262 Z" fill="#fde68a"/>
+      <path d="M430 284 C437 296 439 306 436 314 C432 322 428 322 424 314 C421 306 423 296 430 284 Z" fill="#fff"/>
+      <path d="M322 330 Q430 372 538 330 Q530 356 430 362 Q330 356 322 330 Z" fill="#3f3f46" stroke="#71717a" stroke-width="2"/>
+      <rect x="424" y="360" width="12" height="150" fill="#3f3f46"/>
+      <ellipse cx="430" cy="514" rx="70" ry="14" fill="#3f3f46" stroke="#71717a" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="cap" data-s="2"><p class="h2" style="font-size:56px">Lamp<span class="hl">.</span>는 바로 그 <span class="hl">밑</span>을 비춥니다.</p></div>
+</section>
+
+<!-- 07 제품 공개 -->
+<section class="slide night s-reveal" data-time="45" data-notes="그래서 저희는 Lamp.를 만들었습니다. 핵심은 한 문장입니다. 기여를 새로 입력하게 하지 않습니다. 이미 한 일을 증거로 바꿉니다. (클릭 — 화면) 학생은 평소처럼 문서를 쓰고 회의를 하고, Lamp.는 그 과정을 기록하고, 교수님은 근거를 보고 판단합니다. 지금 보시는 건 실제 배포된 서비스 화면입니다.">
+  <div class="glow" data-s="1"></div>
+  <div class="word">
+    <p class="logo">Lamp<span>.</span></p>
+    <p class="sub" style="font-size:40px;color:var(--on-night)">기여를 새로 입력하지 않습니다.<br/><span class="hl">이미 한 일을 증거로</span> 바꿉니다.</p>
+  </div>
+  <div class="shot" data-s="1">
+    <div class="frame"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><b style="margin-left:12px">Lamp.</b> · 1팀 · 스터디메이트 · 대시보드</div><img src="assets/dashboard.jpg" alt="Lamp. 학생 팀 대시보드 실제 화면" /></div>
+  </div>
+</section>
+
+<!-- ================= ACT 3 · PRODUCT ================= -->
+
+<!-- 08 사용자 여정 -->
+<section class="slide paper s-journey" data-time="210" data-steps="4" data-notes="한 팀의 한 학기를 따라가 보겠습니다. ① 팀에 참여하고 구글 문서를 연결합니다. 한양대 구글 로그인과 함께 드라이브 연동이 됩니다. ② 그다음은 평소처럼 작업합니다. 모든 수정이 활동 기록으로 쌓이고, 작성자가 확정인지 추정인지 함께 표시됩니다. ③ 문서마다 지금 본문에 누구의 글이 얼마나 남아 있는지 봅니다. ④ AI가 기록을 근거로 팀과 팀원별 분석을 씁니다. ⑤ 교수님은 담당 수업의 모든 팀을 한 표로 보고, 팀을 누르면 학생과 같은 화면을 읽기 전용으로 봅니다. — 여기서 라이브 시연으로 넘어갑니다 (약 2분 30초). 시연 순서: 교수로 체험 → 팀 대시보드 → 팀원 분석 → AI 보고서의 근거 클릭 → 활동 기록 원문. 시연이 불가능하면 이 슬라이드의 화면으로 설명.">
+  <div class="pad" style="width:560px">
+    <p class="eyebrow"><b>02</b> 제품 · 실제 화면</p>
+    <h2 class="h2" style="margin-top:24px;font-size:64px">한 팀의<br/>한 학기.</h2>
+  </div>
+  <ol class="journey">
+    <li data-cur="0"><span class="n">01</span><div><div class="t">팀 · 문서 연결</div><div class="d">한양대 구글 로그인 한 번으로 드라이브 연동</div></div></li>
+    <li data-cur="1"><span class="n">02</span><div><div class="t">평소처럼 작업</div><div class="d">모든 수정이 기록 — 작성자 확인 / 추정 표시</div></div></li>
+    <li data-cur="2"><span class="n">03</span><div><div class="t">기여 확인</div><div class="d">본문에 남은 글의 작성자 비중</div></div></li>
+    <li data-cur="3"><span class="n">04</span><div><div class="t">AI 분석</div><div class="d">기록을 근거로 팀 · 팀원별 분석</div></div></li>
+    <li data-cur="4"><span class="n">05</span><div><div class="t">교수 확인</div><div class="d">모든 팀을 한 표로, 읽기 전용</div></div></li>
+  </ol>
+  <div class="shots">
+    <div class="frame" data-only="0"><div class="bar"><b>학생</b> · 팀 대시보드</div><img src="assets/dashboard.jpg" alt="팀 대시보드" /></div>
+    <div class="frame" data-only="1"><div class="bar"><b>학생</b> · 활동 기록</div><img src="assets/activities.jpg" alt="활동 기록" /></div>
+    <div class="frame" data-only="2"><div class="bar"><b>학생</b> · 문서별 기여</div><img src="assets/doc-detail.jpg" alt="문서별 기여" /></div>
+    <div class="frame" data-only="3"><div class="bar"><b>학생</b> · 기여 분석 (AI)</div><img src="assets/analysis.jpg" alt="AI 기여 분석" /></div>
+    <div class="frame" data-only="4"><div class="bar"><b>교수</b> · 전체 대시보드 · 담당 수업의 모든 팀</div><img src="assets/prof-dash.jpg" alt="교수 전체 대시보드: 팀별 변경 기록, 확인·추정 건수, 살펴볼 점" /></div>
+  </div>
+  <div class="folio" style="left:680px;right:72px"><span>실제 서비스 화면 · 심사용 데모 계정 · 이어서 라이브 시연</span><span>08</span></div>
+</section>
+
+<!-- ================= ACT 4 · TECHNOLOGY ================= -->
+
+<!-- 09 구글 독스의 문제 -->
+<section class="slide night s-docprob" data-time="35" data-notes="이제 기술입니다. 가장 어려웠던 문제부터. 학생들은 이미 구글 문서로 같이 씁니다. 그런데 여러 명이 동시에 쓰면, 구글은 짧은 시간의 편집을 하나의 버전으로 합칩니다. (클릭) 버전 하나에 편집자 세 명. 어느 문장을 누가 썼는지는 남지 않습니다. 마감 직전, 가장 많이 함께 쓰는 순간이 가장 기여가 안 보이는 순간입니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Technology 01</b> · 작성자 추적</p>
+    <h2 class="h2" style="margin-top:24px">동시에 쓰면, <span class="hl">작성자가 사라집니다.</span></h2>
+  </div>
+  <div class="gdoc" style="left:var(--m);top:330px;width:1000px;height:520px">
+    <div class="gbar"><b>최종 보고서</b><span>· 공동 편집 중</span></div>
+    <div class="body">
+      <p class="who-line">2. 문제 정의<span class="cur-flag" style="background:var(--a)"><em style="background:var(--a)">팀원 A</em></span> — 기존 동료평가는 주관적이며</p>
+      <p class="who-line">학기 말 한 번의 기억에 의존한다<span class="cur-flag" style="background:var(--b)"><em style="background:var(--b)">팀원 B</em></span>. 따라서 본 팀은</p>
+      <p class="who-line">활동 기록을 근거로 한 평가 방식을<span class="cur-flag" style="background:var(--c)"><em style="background:var(--c)">팀원 C</em></span> 제안한다.</p>
+    </div>
+  </div>
+  <div class="vh">
+    <p class="eyebrow" style="margin-bottom:20px">버전 기록</p>
+    <div class="row" data-s="1"><div class="t">오후 11:42</div><div class="m">편집자 3명 · 하나의 버전으로 병합</div><div class="avs"><span style="background:var(--a)">A</span><span style="background:var(--b)">B</span><span style="background:var(--c)">C</span></div></div>
+    <p class="sub" data-s="1" style="margin-top:28px;font-size:32px;color:var(--on-night)">어느 문장이 누구의 것인지<br/><span class="hl">알 수 없습니다.</span></p>
+  </div>
+  <div class="folio"><span>원리 도해</span><span>09</span></div>
+  <p class="rd" style="left:var(--m);width:1060px;top:880px">구글 문서는 여러 명이 동시에 편집하면 짧은 시간의 변경을 하나의 버전으로 합칩니다. 버전 기록엔 편집자 목록만 남아, 어떤 문장을 누가 썼는지 알 수 없습니다.</p>
+</section>
+
+<!-- 10 제안 모드 -->
+<section class="slide paper s-attr" data-time="75" data-steps="5" data-notes="저희의 답은 구글 문서의 '제안 모드'입니다. 제안에는 작성자가 붙습니다. 팀원은 제안 모드로 쓰기만 하면 됩니다. (1) 두 사람이 동시에 씁니다. (2) Lamp. 워커가 짧은 주기로 문서의 제안을 읽고, 내용이 잠시 그대로면 입력이 끝났다고 봅니다. (3) 문서를 docx로 내보내 변경 추적 정보에서 작성자를 찾아 제안과 짝짓습니다 — 구글 API가 제안의 작성자를 직접 주지 않기 때문에 필요한 우회입니다. (4) 기록한 뒤 바로 수락합니다. 문서는 일반 편집처럼 깔끔하고, Lamp.엔 작성자별 형광펜이 남습니다. (5) 기여는 추정 없이 '확정'으로 쌓입니다. 동명이인이거나 아직 docx에 반영 안 된 제안은 수락하지 않고 보류합니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Technology 01</b> · Google Docs 제안 모드</p>
+    <h2 class="h2" style="margin-top:24px">제안 하나하나에 <span class="hl">작성자를 붙입니다.</span></h2>
+  </div>
+  <div class="gdoc">
+    <div class="gbar"><b>최종 보고서</b><span>· 제안 모드</span></div>
+    <span class="stillchip" data-only="2">입력 멈춤 감지 중…</span>
+    <div class="body" style="padding-top:60px">
+      <p>2. 문제 정의 — 기존 동료평가는 주관적이며 <span class="sg a"><span class="flag">팀원 A</span>학기 말 한 번의 기억에 의존한다.<span class="stamp">작성자 확정 · 팀원 A</span></span></p>
+      <p style="margin-top:96px">3. 해결 방안 — <span class="sg b"><span class="flag">팀원 B</span>문서·회의·할 일 기록을 근거로 삼는다.<span class="stamp">작성자 확정 · 팀원 B</span></span></p>
+    </div>
+  </div>
+  <ol class="rail">
+    <li data-cur="1"><span class="n">1</span><div><div class="t">동시에 입력</div><div class="d">두 팀원이 같은 순간 제안 모드로 작성</div></div></li>
+    <li data-cur="2"><span class="n">2</span><div><div class="t">입력 끝 감지</div><div class="d">워커가 짧은 주기로 제안을 읽고, 내용이 멈추면 완료로 판단</div></div></li>
+    <li data-cur="3"><span class="n">3</span><div><div class="t">작성자 식별</div><div class="d">docx 변경 추적의 작성자를 제안과 짝지음</div></div></li>
+    <li data-cur="4"><span class="n">4</span><div><div class="t">기록 후 자동 수락</div><div class="d">문서는 깨끗하게, Lamp.엔 작성자별 흔적</div></div></li>
+    <li data-cur="5"><span class="n">5</span><div><div class="t">기여 반영</div><div class="d">추정이 아닌 <b>확정</b> 기여로 집계</div></div></li>
+  </ol>
+  <div class="contrib" data-s="5">
+    <div class="r ra"><span>팀원 A</span><div class="bar"><span style="background:var(--a)"></span></div><span class="num">+23자</span></div>
+    <div class="r rb"><span>팀원 B</span><div class="bar"><span style="background:var(--b)"></span></div><span class="num">+21자</span></div>
+  </div>
+  <p class="apis mono">documents.get · SUGGESTIONS_INLINE<br/>docx 내보내기 → w:ins / w:del 작성자<br/>batchUpdate · acceptSuggestion</p>
+  <div class="folio" style="right:auto"><span>원리 도해 · 실제 파이프라인: src/lib/google/suggestionSync.ts</span></div>
+  <p class="rd" style="left:var(--m);width:1060px;top:900px">팀원이 구글 문서의 ‘제안 모드’로 쓰면 제안마다 작성자가 붙습니다. Lamp.가 이를 기록한 뒤 자동으로 수락하므로, 문서는 평소처럼 깔끔하고 기여는 문장 단위로 확정됩니다.</p>
+</section>
+
+<!-- 11 신뢰도 -->
+<section class="slide white s-conf" data-time="40" data-notes="모든 기록이 제안 모드로 들어오지는 않습니다. 그래서 Lamp.는 모든 기록에 '얼마나 확실한가'를 붙입니다. 제안 모드는 확정. 직접 수정이라도 그 구간에 편집자가 한 명이면 단독. 여러 명이 섞였으면 Drive Activity의 편집 시간 비율로 나누고 '추정'. 그것도 없으면 마지막 수정자로 참고만 합니다. 오른쪽은 실제 화면입니다 — 확인됨과 추정이 구분되어 있고, 추정·미확인 기록은 확인된 활동 수에 넣지 않습니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Technology 01</b> · 신뢰도 등급</p>
+    <h2 class="h2" style="margin-top:24px">모든 기록에 <span class="hl">확실한 정도</span>를 붙입니다.</h2>
+  </div>
+  <div class="ladder">
+    <div class="r"><div><div class="k">확정<small>EXACT</small></div><div class="d">제안 모드 — 작성자가 문장 단위로 남음</div></div><div class="meter"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div></div>
+    <div class="r"><div><div class="k">단독<small>SINGLE</small></div><div class="d">그 수정 구간의 편집자가 1명</div></div><div class="meter"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div></div>
+    <div class="r"><div><div class="k">추정<small>SHARED</small></div><div class="d">여러 명 → 편집 시간 비율로 배분</div></div><div class="meter"><i class="f"></i><i class="f"></i><i></i><i></i></div></div>
+    <div class="r"><div><div class="k">참고<small>FALLBACK</small></div><div class="d">편집 기록 없음 → 마지막 수정자</div></div><div class="meter"><i class="f"></i><i></i><i></i><i></i></div></div>
+  </div>
+  <div class="frame"><div class="bar"><b>실제 화면</b> · 활동 기록</div><img src="assets/acts-tags.jpg" alt="작성자 확인됨, 작성자 추정 표시가 있는 활동 기록" /></div>
+  <p class="note" style="position:absolute;right:var(--m);top:820px;width:840px">추정 · 미확인 기록은 <b style="color:var(--ink)">확인된 활동 수에 넣지 않습니다.</b></p>
+  <p class="rd" style="left:var(--m);right:var(--m);top:880px">제안 모드를 쓰지 않은 직접 수정도 버리지 않고, 작성자가 얼마나 확실한지 등급을 붙여 보여줍니다. 교수는 확정된 근거와 추정을 구분해서 판단할 수 있습니다.</p>
+</section>
+
+<!-- 12 점수 -->
+<section class="slide paper" data-time="60" data-steps="2" data-notes="기록을 점수로 바꾸는 방식입니다. 왼쪽은 예시입니다. 직접 쓴 1,000자는 10점, 붙여넣은 1,000자는 0.3배라 3점. 할 일 완료는 다른 팀원이 확인해야 3점, 아니면 1.5점. 회의 출석 1점. (클릭) 그리고 카테고리별 합계에 로그를 씌웁니다. 그래서 같은 카테고리에서 활동을 10배 늘려도 점수는 약 1.7배밖에 오르지 않습니다. 글자 수 부풀리기가 통하지 않는 구조입니다. 마지막으로 교수님이 정한 과목 가중치를 곱하고 팀 안에서 비율로 바꿉니다. 이 수치는 계산 예시이고, 실제 계산은 DB 함수에서 합니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Technology 02</b> · 근거 기반 기여도</p>
+    <h2 class="h2" style="margin-top:24px">10배 더 써도, 점수는 <span class="hl">1.7배.</span></h2>
+  </div>
+  <div class="conv">
+    <div class="r"><span>직접 쓴 1,000자<small>유효 글자 100자당 1점 · 1건 최대 30점</small></span><span class="arrow">→</span><span class="p">10점</span></div>
+    <div class="r"><span>붙여넣은 1,000자<small>붙여넣기는 0.3배</small></span><span class="arrow">→</span><span class="p">3점</span></div>
+    <div class="r"><span>할 일 완료<small>팀원이 확인해야 만점 (미확인 1.5점)</small></span><span class="arrow">→</span><span class="p">3점</span></div>
+    <div class="r"><span>회의 출석<small>지각 0.5점</small></span><span class="arrow">→</span><span class="p">1점</span></div>
+    <p class="src" style="margin-top:18px">계산 예시 · 실제 산식: compute_points, get_team_contributions (Postgres 함수)</p>
+  </div>
+  <svg class="chart" viewBox="0 0 820 600" data-s="1" aria-label="수확체감 곡선">
+    <line x1="80" y1="520" x2="800" y2="520" stroke="#a1a1aa" stroke-width="2"/>
+    <line x1="80" y1="40" x2="80" y2="520" stroke="#a1a1aa" stroke-width="2"/>
+    <path d="M80 520 L800 520" stroke="#d4d4d8" stroke-dasharray="4 6"/>
+    <!-- y = ln(1+x), x 0..300 → 80..800, y 0..6 → 520..40 -->
+    <path id="lncurve" fill="none" stroke="#4f46e5" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" d="M80 520 L84.8 432.1 L92 376.7 L104 328.2 L128 276.4 L152 245.3 L200 205.5 L272 168.4 L368 136.3 L488 108.7 L632 84.6 L800 63.4"/>
+    <line x1="152" y1="520" x2="152" y2="245.3" stroke="#4f46e5" stroke-dasharray="5 6" stroke-width="2"/>
+    <line x1="80" y1="245.3" x2="152" y2="245.3" stroke="#4f46e5" stroke-dasharray="5 6" stroke-width="2"/>
+    <circle cx="152" cy="245.3" r="10" fill="#4f46e5"/>
+    <line x1="800" y1="520" x2="800" y2="63.4" stroke="#18181b" stroke-dasharray="5 6" stroke-width="2"/>
+    <line x1="80" y1="63.4" x2="800" y2="63.4" stroke="#18181b" stroke-dasharray="5 6" stroke-width="2"/>
+    <circle cx="800" cy="63.4" r="10" fill="#18181b"/>
+    <text x="176" y="290" font-size="26" font-weight="700" fill="#4f46e5">30점 → 3.4</text>
+    <text x="780" y="112" font-size="26" font-weight="700" fill="#18181b" text-anchor="end">300점 → 5.7</text>
+    <text x="80" y="566" font-size="20" fill="#6b6b75">활동 점수 합계 →</text>
+    <text x="800" y="566" font-size="20" fill="#6b6b75" text-anchor="end">×10</text>
+    <text x="64" y="52" font-size="20" fill="#6b6b75" text-anchor="end">ln(1+x)</text>
+  </svg>
+  <div class="weights" data-s="2">
+    <span>카테고리별 ln(1+합계)</span><span class="sep">×</span>
+    <span>과목 가중치 <span class="hl">문서 40 · 할 일 30 · 회의 15 · 파일 15</span></span><span class="sep">→</span>
+    <span>팀 내 비중 (합 100%)</span><span class="sep">·</span><span>팀원 인정(👍) ×1.2</span>
+  </div>
+  <p class="rd" style="left:var(--m);right:var(--m);top:996px">활동을 점수로 바꾼 뒤 로그를 씌워, 같은 활동을 많이 할수록 증가폭이 줄어듭니다 — 글자 수 부풀리기가 통하지 않습니다.</p>
+</section>
+
+<!-- 13 AI 파이프라인 -->
+<section class="slide night" data-time="50" data-steps="5" data-notes="숫자만으로는 교수님이 읽기 어렵습니다. 그래서 AI가 정리합니다. 하지만 순서가 중요합니다. (1) 활동 기록이 들어오면 (2) 규칙 엔진이 먼저 비중·패턴·경고를 계산합니다. 막판 집중인지, 2주 이상 공백이 있는지, 비중이 균등 몫의 30% 미만인지. (3) LLM은 그 결과로 문장만 씁니다. 숫자는 만들 수 없습니다. (4) 돌아온 문장의 근거를 다시 검사해서, 입력에 없는 근거가 하나라도 있으면 AI 문장을 버리고 규칙 결과로 돌아갑니다. (5) 그렇게 근거가 붙은 리포트가 나옵니다. AI는 판사가 아니라 서기입니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Technology 03</b> · 근거 기반 AI 리포트</p>
+    <h2 class="h2" style="margin-top:24px">AI는 판단하지 않습니다.<br/><span class="hl">근거를 정리합니다.</span></h2>
+  </div>
+  <div class="pipe">
+    <div class="node" data-s="1"><div class="line"></div><div class="k">INPUT</div><div class="t">활동 기록</div><div class="d">문서 · 할 일 · 회의 · 파일<br/>확정 / 추정 구분 포함</div></div>
+    <div class="node" data-s="2"><div class="line"></div><div class="k">RULES</div><div class="t">규칙 엔진</div><div class="d">비중 · 패턴 · 경고를<br/>코드로 먼저 계산</div></div>
+    <div class="node ai" data-s="3"><div class="line"></div><div class="k">LLM</div><div class="t">문장 작성</div><div class="d">Claude Sonnet (OpenRouter)<br/>JSON 스키마로 형식 강제</div></div>
+    <div class="node" data-s="4"><div class="line"></div><div class="k">VERIFY</div><div class="t">근거 검사</div><div class="d">없는 근거가 있으면<br/>규칙 결과로 되돌림</div></div>
+    <div class="node" data-s="5"><div class="line"></div><div class="k">OUTPUT</div><div class="t">근거 리포트</div><div class="d">학생용: 다음 행동<br/>교수용: 면담 질문</div></div>
+  </div>
+  <div class="guards" data-s="5">
+    <div>숫자는 규칙 엔진 값만<small>비중 · 건수를 AI가 새로 만들지 않음</small></div>
+    <div>추정 근거엔 “(추정)”<small>확정과 추정을 구분해 서술</small></div>
+    <div>단정 · 인성 평가 금지<small>“무임승차했다”가 아니라 “기록이 적다”</small></div>
+  </div>
+  <p class="rd" style="left:var(--m);right:var(--m);top:610px">AI가 점수를 정하지 않습니다. 비중·패턴·경고는 코드(규칙 엔진)가 계산하고, AI는 그 결과를 문장으로 정리합니다. 입력에 없는 근거가 섞이면 AI 문장을 버리고 규칙 결과를 그대로 보여줍니다.</p>
+</section>
+
+<!-- 14 실제 리포트 -->
+<section class="slide white s-report" data-time="40" data-notes="실제로 생성된 리포트입니다. 박준호 팀원은 9주 동안 꾸준히 활동한 것으로 판정됐고, 주요 기여마다 근거 건수가 붙어 있어 클릭하면 원문 기록으로 갑니다. 직접 수정에서 나온 항목엔 자동으로 (추정)이 붙었습니다. 학생용 리포트엔 다음 주에 해볼 일이, 교수용엔 면담에서 물어볼 질문이 붙습니다. 입력은 데모용으로 만든 가상 팀의 기록이지만, 리포트는 서비스가 실제로 생성한 결과입니다.">
+  <div class="lead">
+    <p class="eyebrow"><b>Technology 03</b> · 실제 출력</p>
+    <h2 class="h2" style="margin-top:24px;font-size:64px">AI가 쓴<br/>팀원 리포트.</h2>
+    <p class="note" style="margin-top:28px">데모 계정에서 실제 생성된 결과 · 입력은 데모용 시드 데이터</p>
+  </div>
+  <div class="frame"><img src="assets/ai-member.jpg" alt="팀원별 AI 분석 실제 화면" /></div>
+  <div class="callouts">
+    <div class="co" style="top:5.6%"><span class="ln"></span><span class="tx">패턴 · 근거 수준<small>꾸준함 · 몰아치기 · 막판 집중 · 간헐적</small></span></div>
+    <div class="co" style="top:51.5%"><span class="ln"></span><span class="tx">항목마다 근거 건수<small>클릭 → 원문 기록</small></span></div>
+    <div class="co" style="top:62.5%"><span class="ln"></span><span class="tx">“(추정)” 자동 표기<small>확정 근거와 구분</small></span></div>
+    <div class="co" style="top:87.5%"><span class="ln"></span><span class="tx">다음에 해볼 일<small>교수용에선 면담 질문</small></span></div>
+  </div>
+</section>
+
+<!-- ================= ACT 5 · ENGINEERING ================= -->
+
+<!-- 15 아키텍처 -->
+<section class="slide night" data-time="55" data-notes="구조입니다. 앱은 Next.js 16으로 Vercel에 배포했고, 데이터는 Supabase Postgres입니다. 권한은 앱이 아니라 DB가 지킵니다 — 행 수준 보안으로 학생은 자기 팀, 교수는 자기 과목만 읽습니다. 활동이 생기면 트리거가 이벤트를 적재하고, 점수는 DB 함수가 계산하니 클라이언트가 점수를 조작할 수 없습니다. 구글은 사용자가 고른 파일만 여는 drive.file 권한이고, 토큰은 AES-256-GCM으로 암호화해 둡니다. 제안 수락 워커는 상시 실행이 필요해서 별도 프로세스로 분리했습니다. 그리고 AI가 실패해도 규칙 리포트가 그대로 나갑니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Engineering</b> · 시스템 구조</p>
+    <h2 class="h2" style="margin-top:24px">권한은 <span class="hl">DB</span>가, 점수는 <span class="hl">서버</span>가 정합니다.</h2>
+  </div>
+  <div class="arch">
+    <svg viewBox="0 0 1664 560" aria-hidden="true">
+      <path class="flow hot" d="M250 90 L340 90"/>
+      <path class="flow" d="M250 250 L300 250 L300 130 L340 130"/>
+      <path class="flow hot" d="M600 250 L600 320"/>
+      <path class="flow hot" d="M880 110 L1010 70"/>
+      <path class="flow" d="M880 170 L1010 210"/>
+      <path class="flow hot" d="M1010 350 L940 350 L940 200 L880 200"/>
+    </svg>
+    <div class="box" style="left:0;top:20px;width:250px;height:140px"><div class="k">Client</div><div class="t">학생</div><div style="font-size:19px;color:var(--dim);margin-top:6px">작업 · 내 기여 열람</div></div>
+    <div class="box" style="left:0;top:190px;width:250px;height:140px"><div class="k">Client</div><div class="t">교수</div><div style="font-size:19px;color:var(--dim);margin-top:6px">읽기 전용 조회</div></div>
+    <div class="box" style="left:340px;top:0;width:540px;height:250px"><div class="k">App · Vercel</div><div class="t">Next.js 16</div><div class="chips"><span>App Router 화면</span><span>/api/google/*</span><span>/api/ai-report</span><span>/api/demo-login</span><span>Realtime 구독</span></div></div>
+    <div class="box core" style="left:340px;top:320px;width:540px;height:240px"><div class="k">Data · Supabase</div><div class="t">Postgres <span class="lock">+ RLS</span></div><div class="chips"><span>Auth · 한양 구글</span><span>트리거 → activity_events</span><span>점수 함수</span><span>Realtime</span></div></div>
+    <div class="box" style="left:1010px;top:0;width:654px;height:140px"><div class="k">External</div><div class="t">Google Docs · Drive · Activity · Picker</div><div style="font-size:19px;color:var(--dim);margin-top:6px">drive.file — 사용자가 고른 파일만</div></div>
+    <div class="box" style="left:1010px;top:170px;width:654px;height:120px"><div class="k">External</div><div class="t">OpenRouter → Claude Sonnet</div></div>
+    <div class="box" style="left:1010px;top:320px;width:654px;height:150px"><div class="k">Background</div><div class="t">제안 워커 · 상시 프로세스</div><div style="font-size:19px;color:var(--dim);margin-top:6px">짧은 주기로 /api/google/suggestions/tick 호출</div></div>
+  </div>
+  <div class="sec">
+    <div>행 수준 보안<small>학생은 내 팀, 교수는 내 과목만</small></div>
+    <div>서버에서만 점수 계산<small>트리거 · DB 함수, 클라이언트 조작 불가</small></div>
+    <div>토큰 암호화<small>refresh token AES-256-GCM</small></div>
+    <div>멱등 동기화<small>같은 revision은 1번만 기록</small></div>
+    <div>AI 실패 대비<small>실패 · 근거 오류 시 규칙 리포트</small></div>
+  </div>
+</section>
+
+<!-- ================= ACT 6 · IMPACT ================= -->
+
+<!-- 16 시스템 아키텍처 상세 -->
+<section class="slide white" data-time="30" data-notes="앞 장의 구조를 실제 배포 단위로 펼친 그림입니다. 왼쪽부터 사용자, Vercel 위의 Next.js 화면과 API, Supabase의 인증·DB·스토리지·실시간, 오른쪽 외부 API(OpenRouter, Google). 아래는 GitHub에서 Vercel로 자동 배포되는 흐름과 제안 수락 워커입니다. 심사 자료로 읽으실 수 있도록 넣었습니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Engineering</b> · 시스템 아키텍처 상세</p>
+    <h2 class="h2" style="margin-top:18px;font-size:50px">화면·API는 Vercel, 데이터·권한은 Supabase, 문서·AI는 외부 API.</h2>
+  </div>
+  <div class="arch-legend"><span><i></i>요청 · 호출</span><span><i class="d"></i>이벤트 · 선택 구성</span></div>
+  <div class="arch-sheet">
+<svg class="arch-svg" viewBox="0 0 1600 1070" role="img" aria-label="Lamp. 시스템 아키텍처">
+    
+    <defs>
+      <marker id="m-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--line)"/></marker>
+      <marker id="m-supa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--supa)"/></marker>
+      <marker id="m-ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--ai)"/></marker>
+      <marker id="m-google" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--google)"/></marker>
+      <marker id="m-lamp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--lamp)"/></marker>
+      <g id="person"><circle cx="0" cy="-7" r="7" style="fill:#fff"/><path d="M-13 14a13 11 0 0 1 26 0z" style="fill:#fff"/></g>
+    </defs>
+
+    <!-- ===== 사용자 ===== -->
+    <g>
+      <rect x="70" y="140" width="60" height="60" rx="12" class="a-c-fg"/><use href="#person" x="100" y="172"/>
+      <text x="100" y="222" class="a-ut">학생</text>
+      <text x="100" y="239" class="a-us">팀 워크스페이스</text>
+      <text x="100" y="254" class="a-us a-mono">/student</text>
+
+      <rect x="70" y="360" width="60" height="60" rx="12" class="a-c-fg"/><use href="#person" x="100" y="392"/>
+      <text x="100" y="442" class="a-ut">교수</text>
+      <text x="100" y="459" class="a-us">팀 · 팀원 기여 분석</text>
+      <text x="100" y="474" class="a-us a-mono">/professor</text>
+
+      <rect x="70" y="570" width="60" height="60" rx="12" class="a-c-lamp"/><use href="#person" x="100" y="602"/>
+      <text x="100" y="652" class="a-ut">심사위원</text>
+      <text x="100" y="669" class="a-us">데모 계정</text>
+      <text x="100" y="684" class="a-us">원클릭 로그인</text>
+    </g>
+    <path d="M130 170H196M130 390H196M130 600H196M196 600V155" class="a-ln a-l-ink"/>
+    <path d="M196 155H246" class="a-ln a-l-ink" marker-end="url(#m-ink)"/>
+    <text x="148" y="162" class="a-lbl">HTTPS</text>
+
+    <!-- ===== Vercel ===== -->
+    <rect x="222" y="60" width="538" height="700" rx="14" class="a-frame a-f-vercel"/>
+    <rect x="242" y="47" width="74" height="26" rx="6" class="a-p-vercel"/><text x="279" y="65" class="a-pill-t" text-anchor="middle" style="fill:var(--paper)">Vercel</text>
+    <text x="328" y="65" class="a-ftitle a-c-vercel">서버리스 · 글로벌 엣지 · Node 24</text>
+
+    <rect x="250" y="100" width="480" height="100" rx="10" class="a-card a-s-vercel"/>
+    <rect x="266" y="116" width="40" height="40" rx="9" class="a-c-vercel"/>
+    <path d="M276 136h20M286 126v20M279 129l14 14M293 129l-14 14" class="a-badge-g" style="stroke:var(--paper)"/>
+    <text x="320" y="132" class="a-bt">Edge Network · <tspan class="a-mono" style="font-size:14px">proxy.ts</tspan></text>
+    <text x="320" y="152" class="a-bs">TLS 종료 · 정적 자산 CDN 캐시</text>
+    <text x="320" y="170" class="a-bs">세션 쿠키 갱신 · 보호 경로와 역할별 홈 리다이렉트</text>
+    <text x="320" y="188" class="a-bs">(Next 16에서 middleware 대신 proxy)</text>
+
+    <path d="M490 200V226" class="a-ln a-l-ink" marker-end="url(#m-ink)"/>
+
+    <rect x="250" y="230" width="480" height="240" rx="10" class="a-card a-s-vercel"/>
+    <text x="270" y="258" class="a-bt">Next.js 16 App Router</text>
+    <text x="270" y="276" class="a-bs">React 19 Server Components · Cache Components · Partial Prefetch · Tailwind v4</text>
+    <g>
+      <rect x="270" y="292" width="140" height="58" rx="7" class="a-chip"/><text x="340" y="316" class="a-ct">학생 워크스페이스</text><text x="340" y="334" class="a-cs">보드 · 문서 · 회의 · 파일</text>
+      <rect x="420" y="292" width="140" height="58" rx="7" class="a-chip"/><text x="490" y="316" class="a-ct">교수 대시보드</text><text x="490" y="334" class="a-cs">과목 · 팀 · 팀원 분석</text>
+      <rect x="570" y="292" width="140" height="58" rx="7" class="a-chip"/><text x="640" y="316" class="a-ct">Lamp. 분석 화면</text><text x="640" y="334" class="a-cs a-mono">/lamp · 리포트</text>
+      <rect x="270" y="360" width="140" height="58" rx="7" class="a-chip"/><text x="340" y="384" class="a-ct">Tiptap 에디터</text><text x="340" y="402" class="a-cs">문서 · 회의록 작성</text>
+      <rect x="420" y="360" width="140" height="58" rx="7" class="a-chip"/><text x="490" y="384" class="a-ct">Recharts</text><text x="490" y="402" class="a-cs">기여 구성 · 주간 추이</text>
+      <rect x="570" y="360" width="140" height="58" rx="7" class="a-chip"/><text x="640" y="384" class="a-ct">알림 · 실시간</text><text x="640" y="402" class="a-cs">변경 구독 후 즉시 갱신</text>
+    </g>
+    <text x="490" y="450" class="a-cs a-mono" style="font-size:10.5px">lib: diff · extract · analysis/rules · google/blame · attribute</text>
+
+    <path d="M490 470V496" class="a-ln a-l-ink" marker-end="url(#m-ink)"/>
+
+    <rect x="250" y="500" width="480" height="240" rx="10" class="a-card a-s-vercel"/>
+    <text x="270" y="528" class="a-bt">Route Handlers · <tspan class="a-mono" style="font-size:14px">/api</tspan></text>
+    <text x="270" y="546" class="a-bs">서버리스 함수 · 서버 전용 키는 여기서만 사용</text>
+    <g>
+      <rect x="270" y="562" width="140" height="58" rx="7" class="a-chip"/><text x="340" y="586" class="a-ct a-mono">ai-report</text><text x="340" y="604" class="a-cs">규칙 지표 + AI 서술</text>
+      <rect x="420" y="562" width="140" height="58" rx="7" class="a-chip"/><text x="490" y="586" class="a-ct a-mono">documents/save</text><text x="490" y="604" class="a-cs">diff로 글자 수 기록</text>
+      <rect x="570" y="562" width="140" height="58" rx="7" class="a-chip"/><text x="640" y="586" class="a-ct a-mono">files/register</text><text x="640" y="604" class="a-cs">pptx · docx · hwpx 추출</text>
+      <rect x="270" y="630" width="140" height="58" rx="7" class="a-chip"/><text x="340" y="654" class="a-ct a-mono">google/*</text><text x="340" y="672" class="a-cs">연결 · 동기화 · 공유</text>
+      <rect x="420" y="630" width="140" height="58" rx="7" class="a-chip"/><text x="490" y="654" class="a-ct a-mono">suggestions/tick</text><text x="490" y="672" class="a-cs">문서 제안 자동 수락</text>
+      <rect x="570" y="630" width="140" height="58" rx="7" class="a-chip"/><text x="640" y="654" class="a-ct a-mono">demo · version</text><text x="640" y="672" class="a-cs">데모 로그인 · 배포 감지</text>
+    </g>
+    <text x="490" y="720" class="a-cs">워커 · 크론 호출은 <tspan class="a-mono">CRON_SECRET</tspan>으로 인증</text>
+
+    <!-- ===== Supabase ===== -->
+    <rect x="822" y="60" width="358" height="700" rx="14" class="a-frame a-f-supa"/>
+    <rect x="842" y="47" width="92" height="26" rx="6" class="a-p-supa"/><text x="888" y="65" class="a-pill-t" text-anchor="middle">Supabase</text>
+    <text x="944" y="65" class="a-ftitle a-c-supa">BaaS · Postgres 15+</text>
+
+    <rect x="845" y="100" width="310" height="100" rx="10" class="a-card a-s-supa"/>
+    <rect x="860" y="116" width="40" height="40" rx="9" class="a-c-supa"/>
+    <path d="M872 134v-4a8 8 0 0 1 16 0v4M869 134h22v14h-22z" class="a-badge-g"/>
+    <text x="912" y="132" class="a-bt">Auth</text>
+    <text x="912" y="152" class="a-bs">Google 제공자 · 한양대 계정만 로그인</text>
+    <text x="912" y="170" class="a-bs">이메일 가입 · 데모 계정</text>
+    <text x="912" y="188" class="a-bs">승인된 이메일은 교수로 승격</text>
+
+    <rect x="845" y="230" width="310" height="240" rx="10" class="a-card a-s-supa"/>
+    <rect x="860" y="246" width="40" height="40" rx="9" class="a-c-supa"/>
+    <path d="M870 256c0-3 20-3 20 0v20c0 3-20 3-20 0zM870 256c0 3 20 3 20 0M870 266c0 3 20 3 20 0" class="a-badge-g"/>
+    <text x="912" y="262" class="a-bt">Postgres</text>
+    <text x="912" y="280" class="a-bs">테이블 26개 · 마이그레이션 18개</text>
+    <g>
+      <rect x="860" y="300" width="137" height="58" rx="7" class="a-chip"/><text x="928" y="324" class="a-ct">RLS 정책</text><text x="928" y="342" class="a-cs a-mono">can_view_team</text>
+      <rect x="1004" y="300" width="137" height="58" rx="7" class="a-chip"/><text x="1072" y="324" class="a-ct">기여 트리거</text><text x="1072" y="342" class="a-cs">activity_events 점수</text>
+      <rect x="860" y="366" width="137" height="58" rx="7" class="a-chip"/><text x="928" y="390" class="a-ct">알림 트리거</text><text x="928" y="408" class="a-cs">태스크 · 회의 변경</text>
+      <rect x="1004" y="366" width="137" height="58" rx="7" class="a-chip"/><text x="1072" y="390" class="a-ct a-mono">ai_reports</text><text x="1072" y="408" class="a-cs">분석 결과 저장</text>
+    </g>
+    <text x="1000" y="452" class="a-cs">점수는 DB 함수가 결정적으로 계산</text>
+
+    <rect x="845" y="520" width="310" height="86" rx="10" class="a-card a-s-supa"/>
+    <rect x="860" y="536" width="40" height="40" rx="9" class="a-c-supa"/>
+    <path d="M869 548h22v18h-22zM869 548l4-5h14l4 5" class="a-badge-g"/>
+    <text x="912" y="552" class="a-bt">Storage · <tspan class="a-mono" style="font-size:14px">team-files</tspan></text>
+    <text x="912" y="572" class="a-bs">비공개 버킷 · 파일 버전별 보관</text>
+    <text x="912" y="590" class="a-bs">팀원만 업로드 · 다운로드</text>
+
+    <rect x="845" y="640" width="310" height="100" rx="10" class="a-card a-s-supa"/>
+    <rect x="860" y="656" width="40" height="40" rx="9" class="a-c-supa"/>
+    <path d="M882 660l-10 16h9l-3 14 12-18h-9z" class="a-badge-g"/>
+    <text x="912" y="672" class="a-bt">Realtime</text>
+    <text x="912" y="692" class="a-bs a-mono">postgres_changes 발행</text>
+    <text x="912" y="710" class="a-bs">브라우저와 WebSocket 직결</text>
+    <text x="912" y="728" class="a-bs">문서 · 제안 · 기여 표 즉시 반영</text>
+
+    <path d="M1155 440H1168V690H1159" class="a-ln a-l-supa a-dash" marker-end="url(#m-supa)"/>
+
+    <!-- Vercel → Supabase -->
+    <path d="M730 150H841" class="a-ln a-l-supa" marker-end="url(#m-supa)"/>
+    <text x="786" y="142" class="a-lbl" text-anchor="middle">세션 확인</text>
+    <path d="M730 330H841" class="a-ln a-l-supa" marker-end="url(#m-supa)"/>
+    <text x="791" y="322" class="a-lbl" text-anchor="middle">RLS 쿼리</text>
+    <path d="M730 562H841" class="a-ln a-l-supa" marker-end="url(#m-supa)"/>
+    <text x="791" y="554" class="a-lbl" text-anchor="middle">서버 키</text>
+
+    <!-- ===== 외부 API ===== -->
+    <rect x="1240" y="60" width="330" height="700" rx="14" class="a-frame a-f-ext"/>
+    <rect x="1260" y="47" width="78" height="26" rx="6" class="a-p-ext"/><text x="1299" y="65" class="a-pill-t" text-anchor="middle">외부 API</text>
+
+    <rect x="1265" y="100" width="280" height="230" rx="10" class="a-card a-s-ai"/>
+    <rect x="1280" y="116" width="40" height="40" rx="9" class="a-c-ai"/>
+    <path d="M1292 136a4 4 0 1 0 0.1 0M1310 126a4 4 0 1 0 0.1 0M1310 146a4 4 0 1 0 0.1 0M1295 134l11-6M1295 138l11 6" class="a-badge-g"/>
+    <text x="1332" y="132" class="a-bt">OpenRouter</text>
+    <text x="1332" y="150" class="a-bs a-mono">OPENROUTER_API_KEY</text>
+    <rect x="1280" y="170" width="250" height="70" rx="8" class="a-chip"/>
+    <text x="1405" y="196" class="a-ct" style="font-size:13.5px">Claude Sonnet 5.5</text>
+    <text x="1405" y="214" class="a-cs a-mono">anthropic/claude-sonnet-5.5</text>
+    <text x="1405" y="230" class="a-cs">json_schema strict 응답</text>
+    <rect x="1280" y="252" width="250" height="62" rx="8" class="a-card a-s-ai a-dash" style="fill:none"/>
+    <text x="1405" y="277" class="a-cs" style="fill:var(--fg)"><tspan class="a-mono">OPENROUTER_MODEL</tspan>로 모델 교체</text>
+    <text x="1405" y="296" class="a-cs">키가 없으면 규칙 분석만 표시</text>
+
+    <rect x="1265" y="370" width="280" height="370" rx="10" class="a-card a-s-google"/>
+    <rect x="1280" y="386" width="40" height="40" rx="9" class="a-c-google"/>
+    <path d="M1300 394l12 20h-24zM1294 404l-6 10M1306 404l6 10" class="a-badge-g"/>
+    <text x="1332" y="402" class="a-bt">Google Cloud</text>
+    <text x="1332" y="420" class="a-bs">문서 연동 · 학교 계정 로그인</text>
+    <g>
+      <rect x="1280" y="440" width="250" height="54" rx="7" class="a-chip"/><text x="1405" y="463" class="a-ct">OAuth 2.0</text><text x="1405" y="480" class="a-cs">한양대 로그인 · Drive 연결 동의</text>
+      <rect x="1280" y="502" width="250" height="54" rx="7" class="a-chip"/><text x="1405" y="525" class="a-ct">Drive API <tspan class="a-mono" style="font-weight:500">drive.file</tspan></text><text x="1405" y="542" class="a-cs">문서 생성 · 공유 · 리비전 내보내기</text>
+      <rect x="1280" y="564" width="250" height="54" rx="7" class="a-chip"/><text x="1405" y="587" class="a-ct">Drive Activity API</text><text x="1405" y="604" class="a-cs">편집자별 활동 → 기여 귀속</text>
+      <rect x="1280" y="626" width="250" height="54" rx="7" class="a-chip"/><text x="1405" y="649" class="a-ct">Picker <tspan style="font-weight:500">(브라우저)</tspan></text><text x="1405" y="666" class="a-cs">기존 구글 문서 선택 · 연결</text>
+    </g>
+    <text x="1405" y="716" class="a-cs">refresh token은 암호화해 DB에 저장</text>
+
+    <!-- API → OpenRouter -->
+    <path d="M730 515H790V495H1218V215H1261" class="a-ln a-l-ai" marker-end="url(#m-ai)"/>
+    <text x="1000" y="489" class="a-lbl-b a-c-ai" text-anchor="middle">지표 JSON → 서술 생성 · HTTPS</text>
+    <!-- API → Google -->
+    <path d="M730 640H808V780H1405V744" class="a-ln a-l-google" marker-end="url(#m-google)"/>
+    <text x="1000" y="774" class="a-lbl-b a-c-google" text-anchor="middle">Drive · Activity API 호출 (사용자 토큰)</text>
+
+    <!-- ===== CI/CD ===== -->
+    <rect x="30" y="810" width="730" height="230" rx="14" class="a-frame a-f-ci"/>
+    <rect x="50" y="797" width="62" height="26" rx="6" class="a-p-ci"/><text x="81" y="815" class="a-pill-t" text-anchor="middle" style="fill:var(--paper)">CI/CD</text>
+    <text x="122" y="815" class="a-ftitle a-c-fg">배포 파이프라인</text>
+
+    <g>
+      <rect x="70" y="850" width="56" height="56" rx="11" class="a-c-fg"/>
+      <path d="M86 870l-6 8 6 8M110 870l6 8-6 8M101 866l-6 24" class="a-badge-g" style="stroke:var(--paper)"/>
+      <text x="98" y="926" class="a-ut">개발팀</text><text x="98" y="942" class="a-us a-mono">git push</text>
+
+      <rect x="238" y="850" width="56" height="56" rx="11" class="a-c-fg"/>
+      <path d="M256 864v28M256 878c14 0 20-4 20-14M276 864a3 3 0 1 0 0.1 0M256 892a3 3 0 1 0 0.1 0" class="a-badge-g" style="stroke:var(--paper)"/>
+      <text x="266" y="926" class="a-ut">GitHub 저장소</text><text x="266" y="942" class="a-us a-mono">vaxxerz/lamp</text>
+
+      <rect x="422" y="850" width="56" height="56" rx="11" class="a-c-vercel"/>
+      <path d="M450 864l14 26h-28z" class="a-badge-g" style="stroke:var(--paper)"/>
+      <text x="450" y="926" class="a-ut">Vercel 빌드</text><text x="450" y="942" class="a-us">Preview · Production 자동 배포</text>
+
+      <rect x="618" y="850" width="56" height="56" rx="11" class="a-c-lamp"/>
+      <path d="M634 878a12 12 0 0 1 22-7M656 864v7h-7M658 878a12 12 0 0 1-22 7M636 892v-7h7" class="a-badge-g"/>
+      <text x="646" y="926" class="a-ut">새 배포 감지</text><text x="646" y="942" class="a-us a-mono">/api/version</text>
+    </g>
+    <path d="M126 878H234M294 878H418M478 878H614" class="a-ln a-l-ink" marker-end="url(#m-ink)"/>
+    <path d="M450 850V764" class="a-ln a-l-ink" marker-end="url(#m-ink)"/>
+    <text x="458" y="800" class="a-lbl">Git 연동 자동 배포</text>
+    <text x="646" y="958" class="a-us">열린 화면에 새로고침 안내</text>
+
+    <line x1="50" y1="972" x2="740" y2="972" style="stroke:var(--chip-line)"/>
+    <text x="50" y="996" class="a-lbl"><tspan class="a-lbl-b a-c-supa" style="fill:var(--supa)">DB</tspan>  <tspan class="a-mono">supabase/migrations</tspan> 번호 순서대로 적용 · <tspan class="a-mono">npm run seed:demo</tspan>로 데모 계정 생성</text>
+    <text x="50" y="1020" class="a-lbl"><tspan class="a-lbl-b" style="fill:var(--fg)">검증</tspan>  <tspan class="a-mono">test:db</tspan>(PGlite로 RLS 검사) · <tspan class="a-mono">test:unit</tspan> · <tspan class="a-mono">typecheck</tspan> · Playwright 스모크</text>
+
+    <!-- ===== 백그라운드 ===== -->
+    <rect x="822" y="810" width="358" height="230" rx="14" class="a-frame a-f-bg"/>
+    <rect x="842" y="797" width="104" height="26" rx="6" class="a-p-bg"/><text x="894" y="815" class="a-pill-t" text-anchor="middle">백그라운드</text>
+
+    <rect x="845" y="845" width="310" height="92" rx="10" class="a-card a-s-lamp"/>
+    <text x="864" y="872" class="a-bt a-mono" style="font-size:14px">suggestion-worker</text>
+    <text x="864" y="892" class="a-bs">1초마다 <tspan class="a-mono">/api/google/suggestions/tick</tspan></text>
+    <text x="864" y="910" class="a-bs">구글 문서 제안 기록 · 자동 수락</text>
+    <text x="864" y="926" class="a-bs">Bearer <tspan class="a-mono">CRON_SECRET</tspan> · 데모 중 실행</text>
+
+    <rect x="845" y="952" width="310" height="72" rx="10" class="a-card a-s-lamp a-dash"/>
+    <text x="864" y="979" class="a-bt" style="font-size:14px">Vercel Cron <tspan class="a-bs">(선택)</tspan></text>
+    <text x="864" y="999" class="a-bs"><tspan class="a-mono">/api/google/sync-all</tspan> 전체 문서 동기화</text>
+    <text x="864" y="1015" class="a-bs"><tspan class="a-mono">vercel.json</tspan>에 주기 등록 시 동작</text>
+
+    <path d="M845 890H790V712H734" class="a-ln a-l-lamp" marker-end="url(#m-lamp)"/>
+    <text x="786" y="858" class="a-lbl-b a-c-lamp" text-anchor="end" style="fill:var(--lamp)">tick</text>
+
+    <!-- ===== 보안 · 설계 포인트 ===== -->
+    <rect x="1240" y="810" width="330" height="230" rx="14" class="a-sec-panel"/>
+    <text x="1262" y="842" class="a-bt">보안 · 설계 포인트</text>
+    <g class="a-bullet">
+      <text x="1262" y="872"><tspan class="a-c-sec">•</tspan> 모든 테이블 RLS · 팀원과 담당 교수만 열람</text>
+      <text x="1262" y="898"><tspan class="a-c-sec">•</tspan> service_role 키는 서버 Route Handler 전용</text>
+      <text x="1262" y="924"><tspan class="a-c-sec">•</tspan> Google refresh token 암호화 저장</text>
+      <text x="1262" y="950"><tspan class="a-c-sec">•</tspan> 기여 점수는 DB 트리거가 결정, AI는 서술만</text>
+      <text x="1262" y="976"><tspan class="a-c-sec">•</tspan> 로그인은 한양대 계정 · 교수는 이메일 승인</text>
+      <text x="1262" y="1002"><tspan class="a-c-sec">•</tspan> 키 · 비밀번호는 Vercel 환경 변수로만 관리</text>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<!-- 17 도입 -->
+<section class="slide paper" data-time="40" data-notes="실제 수업에서는 이렇게 씁니다. 교수님이 과목을 만들고 가중치를 정하면 초대 코드가 나옵니다. 학생은 한양대 구글 계정으로 들어와 팀에 참여하고, 이미 쓰고 있는 구글 문서를 연결합니다. 새 도구로 옮길 필요가 없습니다. 학기 중엔 기록이 자동으로 쌓이고, 팀은 AI 리포트로 스스로 점검합니다. 학기 말에 교수님은 근거를 보고, 필요하면 면담 질문으로 확인합니다. 교수가 없는 동아리·공모전 팀도 독립 팀으로 바로 씁니다. 여기까지 구현되어 있고, 다음 단계는 학과 단위 파일럿과 LMS 연동입니다.">
+  <div class="pad">
+    <p class="eyebrow"><b>Impact</b> · 도입</p>
+    <h2 class="h2" style="margin-top:24px">옮길 필요 없이, <span class="hl">연결</span>만 합니다.</h2>
+  </div>
+  <div class="tl">
+    <div class="st"><div class="w">학기 시작</div><div class="t">과목 생성</div><div class="d">가중치 설정 · 초대 코드</div><div class="who">교수</div></div>
+    <div class="st"><div class="w">1주차</div><div class="t">팀 참여</div><div class="d">한양대 구글 로그인 · 문서 연결</div><div class="who">학생</div></div>
+    <div class="st"><div class="w">학기 중</div><div class="t">자동 기록</div><div class="d">문서 · 할 일 · 회의 · 파일</div><div class="who">자동</div></div>
+    <div class="st"><div class="w">중간 점검</div><div class="t">팀 리포트</div><div class="d">다음 주에 해볼 일</div><div class="who">학생</div></div>
+    <div class="st"><div class="w">학기 말</div><div class="t">근거 확인</div><div class="d">팀원 분석 · 면담 질문</div><div class="who">교수</div></div>
+  </div>
+  <div class="lower">
+    <div><span class="tag live"><i></i>지금 동작</span><p class="t">교수 없이도 — 독립 팀</p><p class="d">동아리 · 공모전 · 스터디. 교수 · 성적 언급 없는 팀원용 리포트</p></div>
+    <div><span class="tag plan">다음 단계 · 계획</span><p class="t">학과 파일럿 → LMS 연동</p><p class="d">캡스톤 과목 한 학기 운영 · 성적 내보내기 · GitHub 연동</p></div>
+  </div>
+</section>
+
+<!-- ================= ACT 7 · CLOSING ================= -->
+
+<!-- 18 마무리 -->
+<section class="slide night s-close" data-time="20" data-steps="1" data-notes="처음 질문으로 돌아가겠습니다. 조원 평가는 어떻게 이루어져야 할까요. 저희의 답은 이것입니다. 판단은 교수님이 하십니다. (클릭) 그 판단의 근거는, Lamp.가 비춥니다. 감사합니다.">
+  <div class="pad">
+    <p class="hero">판단은 교수가.</p>
+    <p class="hero l2" style="margin-top:8px"><span class="hl">근거</span>는 Lamp.가.</p>
+    <p class="sub" style="margin-top:72px;font-size:30px">Lamp<span class="hl">.</span> · 조민성 · 인시환 · 최완규 · 감사합니다</p>
+  </div>
+</section>
+
+<!-- ================= APPENDIX ================= -->
+
+<section class="slide white" data-time="0" data-notes="부록 — 질문이 나오면 보여주세요.">
+  <div class="pad">
+    <p class="eyebrow"><b>부록 A</b> · 인용 자료</p>
+    <table class="ref">
+      <thead><tr><th>자료</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>알바몬 대학생 설문 (2007, n=940)</td><td>조별과제 무임승차가 캠퍼스 꼴불견 1위, 37.4% — 파이낸셜뉴스 2007.11.14</td></tr>
+        <tr><td>알바몬 대학생 설문 (n=1,175)</td><td>“묻어가는 조원” 꼴불견 1위, 19.9% — 노컷뉴스 2013.6.18</td></tr>
+        <tr><td>Aggarwal &amp; O'Brien (2008)</td><td>Social loafing on group projects. Journal of Marketing Education 30(3), 255–264</td></tr>
+        <tr><td>장현재 (2024)</td><td>팀원 기여도에 대한 동료평가의 신뢰성과 성적 반영 방법. 공학교육연구 27(1), 63–70</td></tr>
+        <tr><td>Griffith University 동료평가 가이드</td><td>친분 · 동료 압박 편향, 동일 점수 담합 — FSTE 2019 발표자료</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="slide white" data-time="0" data-notes="부록 — 구현 상태. 심사 질문 대응용.">
+  <div class="pad">
+    <p class="eyebrow"><b>부록 B</b> · 구현 상태</p>
+    <table class="ref" style="font-size:21px">
+      <thead><tr><th>기능</th><th>상태 · 근거</th></tr></thead>
+      <tbody>
+        <tr><td>제안 모드 작성자 추적 · 자동 수락</td><td><span class="st-live">구현</span> — suggestionSync.ts · suggestion-worker.mjs (워커는 별도 프로세스로 실행 필요)</td></tr>
+        <tr><td>스냅샷 diff + Drive Activity 시간 비율 배분</td><td><span class="st-live">구현</span> — attribute.ts, 단위 테스트 11개</td></tr>
+        <tr><td>기여도 산식 (ln 수확체감 · 가중치 · 인정 ×1.2)</td><td><span class="st-live">구현</span> — Postgres 함수 compute_points · get_team_contributions</td></tr>
+        <tr><td>규칙 엔진 + LLM 리포트 · 근거 검사 · 실패 시 규칙 리포트</td><td><span class="st-live">구현</span> — src/lib/analysis, /api/ai-report</td></tr>
+        <tr><td>RLS · 토큰 AES-256-GCM · drive.file</td><td><span class="st-live">구현</span> — migrations/*_rls.sql · google/crypto.ts</td></tr>
+        <tr><td>동료평가 입력 · 불일치 표시</td><td><span class="st-part">부분</span> — DB 산식과 보고서 표시는 있음, 학생 입력 화면은 확인 필요</td></tr>
+        <tr><td>학과 파일럿 · LMS 연동 · GitHub 연동</td><td><span class="st-plan">계획</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<div class="progress" id="progress"></div>
+<div class="notes" id="notes"></div>
+<div class="hud">
+  <button id="prev" aria-label="이전">‹</button>
+  <span id="counter">1 / 1</span>
+  <button id="next" aria-label="다음">›</button>
+  <button id="timer" class="opt" title="T: 타이머">15:00</button>
+  <span id="pace" class="opt" title="권장 누적 시간">권장 0:00</span>
+  <button id="notesBtn" title="N: 발표 노트">노트</button>
+  <button id="fs" class="opt" title="F: 전체화면">전체화면</button>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const $ = (id) => document.getElementById(id);
+  const maxStep = (el) => {
+    const explicit = Number(el.dataset.steps || 0);
+    const found = [...el.querySelectorAll('[data-s]')].reduce((m, e) => Math.max(m, Number(e.dataset.s)), 0);
+    return Math.max(explicit, found);
+  };
+  let i = 0, step = 0;
+
+  function fit() {
+    const pad = innerWidth < 700 ? 0 : 0;
+    stage.style.setProperty('--s', Math.min((innerWidth - pad) / 1920, (innerHeight - pad) / 1080));
+  }
+  addEventListener('resize', fit); fit();
+
+  // 단계 적용: data-s ≤ step 보임, data-only === step 보임, data-cur 진행 표시, 슬라이드에 s1..sN 클래스
+  function apply(el, st) {
+    el.querySelectorAll('[data-s]').forEach((e) => e.classList.toggle('on', Number(e.dataset.s) <= st));
+    el.querySelectorAll('[data-only]').forEach((e) => e.classList.toggle('on', Number(e.dataset.only) === st));
+    el.querySelectorAll('[data-cur]').forEach((e) => {
+      const c = Number(e.dataset.cur);
+      e.classList.toggle('cur', c === st);
+      e.classList.toggle('done', c < st);
+    });
+    for (let k = 1; k <= 9; k++) el.classList.toggle('s' + k, st >= k);
+  }
+
+  const fmt = (sec) => { const a = Math.abs(sec); return (sec < 0 ? '-' : '') + Math.floor(a / 60) + ':' + String(Math.floor(a % 60)).padStart(2, '0'); };
+  const cum = slides.reduce((acc, el, k) => (acc.push((acc[k - 1] || 0) + Number(el.dataset.time || 0)), acc), []);
+
+  // 제출용(body.submit): 설명 표시 · 각 장을 완성된 상태로 · 장 단위 이동
+  const SUBMIT = document.body.classList.contains('submit');
+  function show(n, st = 0) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    const el = slides[i];
+    step = SUBMIT ? maxStep(el) : Math.max(0, Math.min(maxStep(el), st));
+    slides.forEach((s, k) => { if (k !== i) s.classList.remove('active'); });
+    if (!el.classList.contains('active')) { el.classList.add('active'); }
+    apply(el, step);
+    $('counter').textContent = (i + 1) + ' / ' + slides.length;
+    $('progress').style.width = ((i + 1) / slides.length * 100) + '%';
+    $('pace').textContent = '권장 ' + fmt(cum[i]);
+    const ms = maxStep(el);
+    $('notes').innerHTML = '<b>' + (i + 1) + ' · 권장 ' + (el.dataset.time || 0) + '초' + (ms ? ' · 단계 ' + step + '/' + ms : '') + '</b><br/>' + (el.dataset.notes || '');
+    history.replaceState(null, '', '#' + (i + 1) + (step ? '.' + step : ''));
+  }
+  const next = () => (SUBMIT ? show(i + 1) : step < maxStep(slides[i]) ? show(i, step + 1) : i < slides.length - 1 && show(i + 1, 0));
+  const prev = () => (SUBMIT ? show(i - 1) : step > 0 ? show(i, step - 1) : i > 0 && show(i - 1, maxStep(slides[i - 1])));
+
+  // 타이머
+  let t = 0, timer = null;
+  const renderT = () => { const left = 900 - t; $('timer').textContent = fmt(left); $('timer').style.color = left < 0 ? '#f87171' : left < 60 ? '#fbbf24' : ''; };
+  const toggleT = () => { if (timer) { clearInterval(timer); timer = null; } else timer = setInterval(() => { t++; renderT(); }, 1000); document.body.classList.toggle('show-hud', !!timer); };
+  const toggleN = () => document.body.classList.toggle('show-notes');
+  const toggleF = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.());
+
+  addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const k = e.key;
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); prev(); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(slides.length - 1);
+    else if (/^[nN]$/.test(k)) toggleN();
+    else if (/^[tT]$/.test(k)) toggleT();
+    else if (/^[fF]$/.test(k)) toggleF();
+    else if (/^[rR]$/.test(k)) { t = 0; renderT(); }
+    else if (/^[cC]$/.test(k)) document.body.classList.toggle('hide-rd');
+  });
+  $('next').onclick = next; $('prev').onclick = prev; $('timer').onclick = toggleT; $('notesBtn').onclick = toggleN; $('fs').onclick = toggleF;
+  stage.addEventListener('click', (e) => { const r = stage.getBoundingClientRect(); ((e.clientX - r.left) < r.width * 0.3 ? prev : next)(); });
+  let sx = null;
+  addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', (e) => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) (dx < 0 ? next : prev)(); sx = null; }, { passive: true });
+
+  // PDF: 모든 슬라이드를 최종 단계로
+  addEventListener('beforeprint', () => slides.forEach((el) => apply(el, maxStep(el))));
+  addEventListener('afterprint', () => show(i, step));
+
+  // ?all=1 → 모든 슬라이드 최종 단계 (QA · 미리보기용)
+  window.__deck = { show, slides, maxStep, apply };
+  renderT();
+  const m = location.hash.match(/^#(\d+)(?:\.(\d+))?/);
+  show(m ? Number(m[1]) - 1 : 0, m && m[2] ? Number(m[2]) : 0);
+})();
+</script>
+</body>
+</html>
