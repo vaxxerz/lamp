@@ -22,7 +22,14 @@ export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email: account.email, password });
   if (error) return NextResponse.redirect(new URL("/login?error=demo", req.url), 303);
-  // 로그인 화면에 next가 있으면 그리로 (예: /lamp/documents), 없으면 역할별 홈
-  const target = typeof next === "string" && next !== "/" ? safeReturnTo(next, account.home) : account.home;
+  // 로그인 화면에 next가 있으면 그리로 (예: /lamp/documents), 없거나 다른 역할의 화면이면 역할별 홈
+  const otherHomes = Object.values(DEMO_ACCOUNTS)
+    .map((a) => a.home)
+    .filter((home) => home !== account.home);
+  const allowed =
+    typeof next === "string" &&
+    next !== "/" &&
+    !otherHomes.some((home) => next === home || next.startsWith(`${home}/`) || next.startsWith(`${home}?`));
+  const target = allowed ? safeReturnTo(next, account.home) : account.home;
   return NextResponse.redirect(new URL(target, req.url), 303);
 }
